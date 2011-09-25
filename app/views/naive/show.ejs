@@ -1,0 +1,129 @@
+
+        <div id="mc_fb_signup">
+            <div id="fb-root"></div>
+            <div id="mc_embed_signup" style="display: none" >
+                <form action="<%= signup_url %>" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank">
+                    <input type="hidden" name="u" value="<%=user_id%>" /> 
+                    <input type="hidden" name="id" value="<%=list_id%>" /> 
+                    <input type="email" value="" name="MERGE0" class="email" id="mc-EMAIL" placeholder="email address" required />
+                    <input type="text" name="MERGE1" id="mc-FNAME" size="25" value="" /> 
+                    <input type="text" name="MERGE2" id="mc-LNAME" size="25" value="" /> 
+                    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+                </form>
+            </div>
+            <style>
+            #mc_fb_signup
+            {
+                 border-radius: 4px;
+                 background-color: #5F78AB;
+            }
+            .subscribe
+            {
+                background: #5F78AB url(http://s3.amazonaws.com/mc_facebook_signup_bucket/facebook_icon.png) no-repeat;
+            
+                border-bottom: solid 1px #1A356E;
+                color: white;
+                display: block;
+                height: 20px;
+                text-align: center;
+                
+                
+            }
+            .subscribe>a
+            {
+                color: white;
+                text-decoration: none;
+                font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+                font-weight: bold;
+                padding: 0 0 0 23px;
+                text-shadow: none;
+                
+            }
+            .email
+            {
+               position: absolute;
+               top: 3px;
+               font-size: 12px; 
+               text-align: center;
+               width: 80%;
+            }
+            </style>
+            
+            <div class="subscribe" >
+                <a href="#" id="fb-gather"><%=signup_prompt%></a>
+                <a href="#" id="fb-submit" style="display: none" class="email" data-prompt=""></a>
+            </div>
+            
+            
+            <script type="text/javascript">
+                var signup_prompt = "<%=signup_prompt%>"
+                $(document).ready(function () {
+
+                    FB.init({
+                        appId  : '165282016887983',
+                        status : false, // check login status
+                        cookie : true, // enable cookies to allow the server to access the session
+                        xfbml  : false, // parse XFBML
+                        //channelURL : 'http://localhost:3001/channel.html', // channel.html file
+                        oauth  : true // enable OAuth 2.0
+                    });
+                    // FB Connect action
+                    $('#fb-gather').bind('click', function () {
+                        FB.login(function(response) {
+                            if (response.authResponse) {
+                                getEmail({submit: true});
+                            } else {
+                                console.log('User cancelled login or did not fully authorize.');
+                            }
+                        }, {scope: 'email'});
+
+                    });
+                    $('#fb-gather').hover(function(){
+                        $('#fb-gather').text("Gather E-mail"); 
+                        
+                    },function(){
+                        $('#fb-gather').text(signup_prompt);
+                        
+                    });
+                    $('#fb-submit').hover(function(){
+                        $('#fb-submit').text("Subscribe now!");
+                        $('#fb-submit').removeClass("email");
+                        },function(){
+                        $('#fb-submit').text($("#fb-submit").data("prompt"));   
+                        $('#fb-submit').addClass("email");
+                    });
+                    $('#fb-submit').click( function(){
+                        $('#mc-embedded-subscribe-form').submit();    
+                        $("#fb-gather").slideToggle();
+                        $("#fb-submit").slideToggle();
+                    });
+                    
+                   
+                });
+                var getEmail = function(options){
+                        console.log('Welcome!  Fetching your information.... ');
+                                FB.api('/me', function(response) {
+                                    console.log('Good to see you, ' + response.name + '.');
+                                    
+                                    
+                                    
+                                      $("#mc-EMAIL").val(response.email);
+                                      $("#mc-FNAME").val(response.first_name);
+                                      $("#mc-LNAME").val(response.last_name);
+                                      
+                                      $("#fb-submit").data("prompt","with "+response.email.slice(0,5)+"..."+response.email.slice(-10));
+                                      $("#fb-submit").html($("#fb-submit").data("prompt"));
+                                                                            
+                                      $("#fb-gather").slideToggle();
+                                      $("#fb-submit").slideToggle();
+                                      
+                                    
+                                });  
+                               
+                }
+               
+                
+            </script>
+        </div>
+
+

@@ -1,0 +1,30 @@
+MailChimp Simple Signup
+Version: ~0.0.1
+
+
+h1. Bullshit:
+* Facebook requires "localhost" dev application URLs
+* MailChimp requires "127.0.0.1" dev application URLs
+* I'm not sure if a simplesignup.dev workaround will work given a likely "invalid domain" error on the app-registration side
+* other ideas?
+
+h1. TODO:
+* Important: dynamic merge values and corresponding form
+* Full client-side error reporting
+* scrolling button text? UX ideas
+* style admin/dashboard pages
+* dashboard button customization code (button-width slider, custom text)
+
+
+
+h1. Features:
+
+* facebook information subscription of MailChimp list
+* grabs email, fname, and lname - for now
+* standard facebook button theme
+
+h1. Ideas:
+* customizable fields to be grabbed from fbook, location(zip)?,website? derp?
+* Other OAuth providers?
+
+

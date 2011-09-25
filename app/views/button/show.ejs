@@ -1,0 +1,134 @@
+
+        <div id="mc-fb-signup" class="subscribe">
+            <div id="fb-root"></div>
+            <div id="mc_embed_signup" style="display: none" >
+                <form action="/subscription" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank">
+                    <input type="hidden" name="u" value="<%=user_id%>" /> 
+                    <input type="hidden" name="id" value="<%=list_id%>" /> 
+                    <input type="text" value="" name="email_address"  id="mc-EMAIL"  />
+                    <input type="text" name="merge_values[MERGE1]" id="mc-FNAME" size="25" value="" /> 
+                    <input type="text" name="merge_values[MERGE2]" id="mc-LNAME" size="25" value="" /> 
+                   
+                </form>
+            </div>
+            <style>
+            
+            
+            .subscribe
+            {
+                background: #5F78AB url(http://s3.amazonaws.com/mc_facebook_signup_bucket/facebook_icon.png) no-repeat;
+                border-radius: 4px;
+                border-bottom: solid 1px #1A356E;
+                color: white;
+                display: block;
+                height: 22px;
+                text-align: center;
+                overflow: hidden;
+                
+                
+            }
+            .subscribe>a
+            {
+                color: white;
+                text-decoration: none;
+                font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+                font-weight: bold;
+                padding: 0 0 0 23px;
+                text-shadow: none;
+                
+            }
+            
+            </style>
+            
+            <div class="subscribe" >
+                <a href="#" id="fb-submit" data-prompt="<%=signup_prompt%>"><%=signup_prompt%></a>
+            </div>
+            
+            
+            <script type="text/javascript">
+               window.fbAsyncInit = function() {
+                   FB.init({
+                       appId: <%= server.facebook_appid %> ,
+                       status: false,
+                       // check login status
+                       cookie: true,
+                       // enable cookies to allow the server to access the session
+                       xfbml: false,
+                       // parse XFBML
+                       //channelURL : 'http://localhost:3001/channel.html', // channel.html file
+                       oauth: true // enable OAuth 2.0
+                   });
+               };
+               (function() {
+                   var e = document.createElement('script');
+                   e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+                   e.async = true;
+                   document.getElementById('fb-root').appendChild(e);
+               }());
+                $(document).ready(function () {
+                    
+                    // FB Connect action
+                    $('#fb-submit').click(function () {
+                        //postInfo(displayResponse);
+                       
+                       
+                        FB.login(function(response) {
+                            if (response.authResponse) {
+                                gatherInfo(postInfo);        
+                            } else {
+                                console.log('User cancelled login or did not fully authorize.');
+                            }
+                        }, {scope: 'email'});
+                      
+
+                    });
+                
+                    $('#fb-submit').hover(function(){
+                        $(this).text("Subscribe now!");
+                        
+                        },function(){
+                        $(this).text('<%=signup_prompt%>');   
+                        
+                    });
+                    
+                    
+                   
+                });
+                var gatherInfo = function(postCallback) {
+                        
+                        console.log('Welcome!  Fetching your information.... ');
+                        FB.api('/me', function(response) {
+                            console.log('Good to see you, ' + response.name + '. '+response.email);
+                            $("#mc-EMAIL").val(response.email);
+                            $("#mc-FNAME").val(response.first_name);
+                            $("#mc-LNAME").val(response.last_name);
+                            postCallback(displayResponse);
+                        });
+                    };
+                var postInfo = function(displayCallback){
+                        $.post("/subscription",$('#mc-embedded-subscribe-form').serialize(),displayCallback,'json');       
+                };
+                var displayResponse = function(data, textStatus, jqXHR){
+                    
+                    //TODO: Update button text to show thank you or response
+                    if (data.result.error){
+                        //TODO: FULL ERROR HANDLING
+                        if(data.result.code == 214){
+                          $("#fb-submit").text("Already Subbed");  
+                        }
+                        else{
+                          $("#fb-submit").text(data.result.error);  
+                        }
+                     
+                    }else{
+                      $("#fb-submit").text("Thank you! " + data.email_address);   
+                    }
+                    //TODO: hideLoading
+                        
+                    
+                };
+                
+            </script>
+        </div>
+
+

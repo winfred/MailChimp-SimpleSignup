@@ -1,0 +1,15 @@
+<h1> Get ur codez </h1>
+
+<dl>
+<% for(var list in user.lists){ %>
+    <dt>List: <%=user.lists[list]%></dt>
+<dd>
+    <iframe src="<%=server.basepath%>/button?signup_prompt=Newsletter%20Signup&u=<%=user._id%>&id=<%=list%>" width="170" height="30" frameBorder="0"></iframe>
+    <br />
+    
+    <code><%=escape("<iframe src='"+server.basepath+"/button?signup_prompt=Newsletter%20Signup&u="+user._id+"&id="+list+"' width='170' height='30' frameBorder='0'></iframe>")%></code>
+    </dd>
+<hr />
+
+<%}%>
+</dl>

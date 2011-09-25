@@ -1,0 +1,13 @@
+{
+
+  "name": "mc-facebook-signup",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "2.4.0",
+    "ejs": "0.4.3",
+    "cradle": "0.5.7",
+    "mailchimp": "0.8.0",
+    "expresso": "0.8.1", 
+    "oauth": "0.9.5"
+  }
+}
