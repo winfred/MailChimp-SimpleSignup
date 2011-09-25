@@ -2,13 +2,33 @@ MailChimp Simple Signup
 Version: ~0.0.1
 
 
+h1. Features:
+
+* facebook information subscription of MailChimp list
+* grabs email, fname, and lname - for now
+* standard facebook button theme
+
+h1. Ideas:
+* other fields to be grabbed from fbook, location(zip)?,website? derp?
+* Other OAuth providers?
+
+h1. TODO:
+* Important: dynamic merge values and corresponding button changes
+* Merge value report on the dashboard to alert user of list-form incompatibility with facebook 
+** ie. they require a value within the MailChimp form that is not submitted here
+* Full button-side error reporting
+* scrolling button text? UX ideas
+* style admin/dashboard pages
+* dashboard button customization code (button-width slider, custom text)
+
+
 h1. Bullshit:
 * Facebook requires "localhost" dev application URLs
 * MailChimp requires "127.0.0.1" dev application URLs
 * I'm not sure if a simplesignup.dev workaround will work given a likely "invalid domain" error on the app-registration side
 * other ideas?
 
-h1. Dev environment setup
+h1. Dev environment setup:
 # create couchDBs somewhere (iriscouch.com) and hookup to config/database.js
 # register MailChimp dev/pro Oauth applications and hookup to config/oauth.js
 # plug in API keys for each MC account for async testing in test/models/factory/user.js
@@ -21,24 +41,3 @@ h4. Some notes about that shit for right now:
 * user_id and list_id in test/models/subscription have not been moved to factory yet 
 ** I plan on moving them when I implement dynamic merge values
 * the same goes for statically coded ids in test/controllers/subscription_controller
-
-h1. TODO:
-* Important: dynamic merge values and corresponding form
-* Full client-side error reporting
-* scrolling button text? UX ideas
-* style admin/dashboard pages
-* dashboard button customization code (button-width slider, custom text)
-
-
-
-h1. Features:
-
-* facebook information subscription of MailChimp list
-* grabs email, fname, and lname - for now
-* standard facebook button theme
-
-h1. Ideas:
-* customizable fields to be grabbed from fbook, location(zip)?,website? derp?
-* Other OAuth providers?
-
-
