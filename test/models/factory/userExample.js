@@ -19,6 +19,6 @@ moduel.exports.user_test = function(props) {
 //Subscription test just needs a user of some connected kind    
 module.exports.subscription_test = new User({
             //this is a testing account
-            _id: 'someUserID',
-            apikey: 'someApiKey'
+            _id: 'someOtherUserID',
+            apikey: 'someOtherApiKey'
         });
