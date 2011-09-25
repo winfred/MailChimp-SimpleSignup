@@ -1,6 +1,6 @@
 {
 
-  "name": "mc-facebook-signup",
+  "name": "mailchimp-simplesignup",
   "version": "0.0.1",
   "dependencies": {
     "express": "2.4.0",
