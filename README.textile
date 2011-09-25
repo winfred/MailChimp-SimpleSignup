@@ -8,6 +8,20 @@ h1. Bullshit:
 * I'm not sure if a simplesignup.dev workaround will work given a likely "invalid domain" error on the app-registration side
 * other ideas?
 
+h1. Dev environment setup
+# create couchDBs somewhere (iriscouch.com) and hookup to config/database.js
+# register MailChimp dev/pro Oauth applications and hookup to config/oauth.js
+# plug in API keys for each MC account for async testing in test/models/factory/user.js
+# $ npm install
+# expresso test/models/*
+# expresso test/controllers/*
+
+h4. Some notes about that shit for right now:
+* follow corresponding *Example.js for 1-3 above
+* user_id and list_id in test/models/subscription have not been moved to factory yet 
+** I plan on moving them when I implement dynamic merge values
+* the same goes for statically coded ids in test/controllers/subscription_controller
+
 h1. TODO:
 * Important: dynamic merge values and corresponding form
 * Full client-side error reporting
