@@ -22,7 +22,7 @@ var testSubscription = function(props) {
 var testUser = require('./factory/user').subscription_test;
     
 var start = function(callback) {
-        testUser().save(callback);
+        testUser.save(callback);
     };
 //test count is 4
 module.exports = {
@@ -37,7 +37,7 @@ module.exports = {
                     res.code.should.eql('214');
                     console.log('finished: Subscription#create duplicate address');
                     //now reset here since it doesn't work in beforeExit
-                    testUser().API().listUnsubscribe({
+                    testUser.API().listUnsubscribe({
                         id: subscription.list_id,
                         email_address: subscription.email_address,
                         delete_member: true
@@ -62,7 +62,7 @@ module.exports = {
                 res.should.be.true;
                 console.log('finished: Subscription#create fresh address');
                 //now reset here since it doesn't work in beforeExit
-                testUser().API().listUnsubscribe({
+                testUser.API().listUnsubscribe({
                     id: subscription.list_id,
                     email_address: subscription.email_address,
                     delete_member: true
