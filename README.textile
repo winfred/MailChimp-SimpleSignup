@@ -32,6 +32,7 @@ h1. Dev environment setup:
 # create couchDBs somewhere (iriscouch.com) and hookup to config/database.js
 # register MailChimp dev/pro Oauth applications and hookup to config/oauth.js
 # plug in API keys for each MC account for async testing in test/models/factory/user.js
+# set up proper facebook app ids in app/server.js
 # $ npm install
 # expresso test/models/*
 # expresso test/controllers/*

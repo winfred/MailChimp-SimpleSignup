@@ -17,7 +17,8 @@ var Subscription = function(properties) {
     };
 Subscription.prototype.create = function(callback) {
     var subscription = this;
-    new User({_id: subscription.user_id}).find_by_id(function(err, user) {
+    var user = new User({_id: subscription.user_id});
+    user.find_by_id(function(err) {
         if (err) {
             if (err.error == "not_found"){
              //mimick an mcAPI error code for usernotfound

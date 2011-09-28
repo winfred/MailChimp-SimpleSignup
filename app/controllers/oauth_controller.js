@@ -10,26 +10,28 @@ var oauth = require('../../config/oauth'),
 module.exports.connect = function(req, res) {
     oauth.getOAuthAccessToken(req.query.code, {
         grant_type: 'authorization_code',
-        redirect_uri: server.basepath+"/connect"
+        redirect_uri: server.basepath + "/connect"
     }, function(error, access_token, refresh_token) {
         if (error) {
-            handle_error(res,error);
-            }
+            handle_error(res, error);
+        }
         else {
             oauth._request("GET", "https://login.mailchimp.com/oauth2/metadata", {
                 Authorization: 'OAuth ' + access_token
             }, "", "", function(meta_error, metadata, responseCode) {
                 if (meta_error) {
-                    handle_error(res,meta_error);
+                    handle_error(res, meta_error);
                 }
                 var user = new User({
                     apikey: (access_token + "-" + JSON.parse(metadata).dc)
                 });
                 user.fetchLists(function() {
-                    user.fetchUserID(function() {
-                        user.save(function() {
-                            req.session.user = user;
-                            res.redirect('/dashboard');
+                    user.fetchListMergeVars(function() {
+                        user.fetchUserID(function() {
+                            user.save(function() {
+                                req.session.user = user;
+                                res.redirect('/dashboard');
+                            });
                         });
                     });
                 });
