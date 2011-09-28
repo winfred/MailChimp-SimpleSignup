@@ -13,7 +13,7 @@ h1. Ideas:
 * Other OAuth providers?
 
 h1. TODO:
-* Important: dynamic merge values and corresponding button changes
+* finish dynamic button forms that match list merge values
 * Merge value report on the dashboard to alert user of list-form incompatibility with facebook 
 ** ie. they require a value within the MailChimp form that is not submitted here
 * Full button-side error reporting
