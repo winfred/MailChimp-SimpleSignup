@@ -2,11 +2,11 @@ process.env.type = 'testing';
 var should = require('should'),
     chimp = require('../../config/chimp'),
     User = require('../../app/models/user');
-var testUser = require('./factory/user').user_test;
+var testUser = require('./factory/user.factory').user_test;
 var init = function(callback) {
         testUser().save(callback);
     };
-//test count 6
+//test count 7
 module.exports = {
     'find_by_id does not exist': function(beforeExit) {
         var calls = 0;
@@ -93,13 +93,11 @@ module.exports = {
         var calls = 0;
         var user = testUser();
         user.fetchLists(function() {
-            should.exist(user.lists);
-            should.exist(user.lists.total);
-            user.lists.total.should.be.above(0);
-            should.exist(user.lists.data);
-            for(var list in user.lists.data){
-                should.exist(user.lists.data[list].name);
-            }
+            user.lists.should.be.an.instanceof(Array);
+            user.lists.length.should.be.above(0);
+            user.lists[0].should.have.property("merge_vars");
+            user.lists[0].should.have.property("name");
+            user.lists[0].should.have.property("id");
             
             calls++;
             console.log('finished: User#fetchListIDs');
@@ -108,38 +106,7 @@ module.exports = {
             calls.should.eql(1);
         });
     },
-    'fetchListMergeVars without lists': function(beforeExit) {
-        var calls = 0;
-        var user = testUser();
-        user.fetchListMergeVars(function() {
-            should.exist(user.lists);
-            calls++;
-            console.log("finished: User#fetchMergeVars without lists");
-        });
-        beforeExit(function() {
-            calls.should.eql(1);
-        });
-    },
-    'fetchListMergeVars with lists already': function(beforeExit) {
-        var calls = 0;
-        var user = testUser();
-        user.fetchLists(function() {
-            user.fetchListMergeVars(function() {
-                for (var list in user.lists.data) {
-                    should.exist(user.lists.data[list].merge_vars);
-                }
-                user.save(function(){
-                    calls++;
-                console.log("finished: User#fetchListMergeVars with lists already");
-                });
-                
-                
-            });
-        });
-        beforeExit(function() {
-            calls.should.eql(1);
-        });
-    },
+    
     'save clears any temp values': function(beforeExit){
         var calls = 0;
         var user = testUser({id: "Freddie", temp: {"this": "is", some: "temp", shit: "yo"}});

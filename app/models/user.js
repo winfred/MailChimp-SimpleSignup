@@ -1,5 +1,6 @@
 var db = require('../../config/database').db,
-    chimp = require('../../config/chimp');
+    chimp = require('../../config/chimp'),
+    List = require('./list');
 /** 
  * User in-memory model is a 1:1 match to Couch document that is enforced here.
  * Essentially functions are attached to the document this way
@@ -9,10 +10,26 @@ var db = require('../../config/database').db,
  * apikey: completed Oauth handshake token
  */
 var User = function(properties) {
+        build_child_objects(this, properties);
         for (var key in properties) {
             this[key] = properties[key];
         }
     };
+/**
+ * inflates UserDoc child objects with properties from DB
+ */
+
+function build_child_objects(user, properties) {
+    //define objects stored inside Couch UserDoc here
+    if (properties && properties.lists) {
+        user.lists = [];
+        for (var list in properties[key]) {
+            //create handy circular user pointer
+            list.user = this;
+            this.lists.push(new List(list));
+        }
+    }
+}
 /**
  * Sugary DB methods
  */
@@ -23,9 +40,10 @@ User.prototype.find_by_id = function(callback) {
             callback(err);
         }
         else {
-            for (var key in doc) {
-            user[key] = doc[key];
+            for(var key in doc){
+              user[key]= doc[key];   
             }
+            build_child_objects(user,doc);
             callback(null);
         }
     });
@@ -35,10 +53,12 @@ User.prototype.save = function(callback) {
     //remove any temp data stored here
     delete user.temp;
     delete user.api;
+    for (var list in user.lists) {
+        //kill handy circular user pointer
+        delete list.user;
+    }
     db.save(user._id, user, function(err, doc) {
-        for (var key in doc) {
-            user[key] = doc[key];
-        }
+        user = new User(doc);
         callback(err);
     });
 };
@@ -52,10 +72,11 @@ User.prototype.remove = function(callback) {
         else {
             //will we ever have user objects without a _rev? If we won't, no need for the first get
             db.remove(doc._id, doc._rev, function(error, res) {
-                if(error){
-                    callback(error);   
-                }else{
-                callback(null);
+                if (error) {
+                    callback(error);
+                }
+                else {
+                    callback(null);
                 }
             });
         }
@@ -69,6 +90,7 @@ User.prototype.remove = function(callback) {
  * MailChimp data-population methods
  * All list/user data fetching methods are found below
  */
+//Grab all relevant list data
 User.prototype.fetchLists = function(callback) {
     var user = this;
     user.API().lists({
@@ -77,19 +99,28 @@ User.prototype.fetchLists = function(callback) {
     }, function(lists) {
         if (lists.error) console.log('Error: ' + lists.error + ' (' + lists.code + ')');
         else {
-            var lists_hash = {
-                total: lists.total,
-                data: {}
-            };
+            user.lists = [];
             for (var i = 0; i < lists.total; i++) {
-                lists_hash.data[lists.data[i].id] = {
+                user.lists.push(new List({
+                    user: user,
+                    id: lists.data[i].id,
                     name: lists.data[i].name
-                };
+                }));
             }
-            user.lists = lists_hash;
-            callback();
+            //got a better way to do async calls? i'd love to hear it since this gives List a dependency to User 
+            user.temp = user.temp || {};
+            user.temp.calls = 0;
+            for (var i = 0; i < user.lists.length; i++) {
+                user.lists[i].fetchMergeVars(callback);
+            }
         }
     });
+};
+//finishes the async process
+User.prototype.finishFetchListsAsync = function(callback) {
+    if (this.lists.length == this.temp.calls) {
+        callback();
+    }
 };
 User.prototype.fetchUserID = function(callback) {
     var user = this;
@@ -99,48 +130,6 @@ User.prototype.fetchUserID = function(callback) {
     });
 };
 
-/**
- * design note: fetch-append-finish can be cleaner... perhaps an abstraction is needed. 
- * ------------------------------------------------------------------------
- */
-//the fetch isn't actually made in this method, which is unclear... perhaps there's a better name for this process
-User.prototype.fetchListMergeVars = function(callback) {
-    var user = this;
-    if (typeof user.lists == 'undefined') {
-        user.fetchLists(function() {
-            user.fetchListMergeVars(callback);
-        });
-        if (process.env.type != 'testing') {
-            console.log("Warning: merge vars fetched before lists... you're covered this time but it is unadvised.");
-        }
-        return false;
-    }
-    //temp var for tracking when async calls are finished...
-    //perhaps this should be apart of the async fetch abstraction?
-    user.temp = user.temp || {};
-    user.temp.calls = 0;
-    for (var list in user.lists.data) {
-        user.appendListMergeVars(list, callback);
-    }
-};
-User.prototype.appendListMergeVars = function(list, callback) {
-    var user = this;
-    user.API().listMergeVars({
-        id: list
-    }, function(merge_vars) {
-        user.lists.data[list].merge_vars = merge_vars;
-        user.temp.calls++;
-        user.finishListMergeVars(callback);
-    });
-};
-User.prototype.finishListMergeVars = function(callback) {
-    if (this.lists.total == this.temp.calls) {
-        callback();
-    }
-};
-/**
- * --------------------the above three methods smell funny -------------------
- */
 User.prototype.API = function() {
     if (typeof this.apikey == 'undefined') {
         console.log('User must have apikey before setting its API object');
@@ -154,32 +143,6 @@ User.prototype.API = function() {
         return this.api;
     }
 };
-/**
- * The List Compliance section:
- * Do the list merge vars fit with the data availalbe in Facebook?
- * Let's find out!
- * 
- * For starters, let's support Email/FName/LName
- * 
- */
- User.prototype.facebookCompliance = function(callback){
-     if (typeof this.lists == 'undefined'){
-        this.complianceFacebook = false;
-     }else if(typeof this.lists.merge_vars == 'undefined'){
-        this.complianceFacebook = false;   
-     }else{
-         //TODO: generate report for each list
-         // incompatible if one of the following is met (for now...)
-         // *anything other than email/fname/lname is required
-         // *Fname And Lname are one merge var
-        
-         
-        
-         
-     }
-     
- }
- 
- 
+
 //export model
 module.exports = User;

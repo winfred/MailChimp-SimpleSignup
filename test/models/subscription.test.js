@@ -1,8 +1,14 @@
+/**
+ *Note, there is some kind of async collision with this suite. 
+ *Tests pass usually, but I'm too tired to find it right now.
+ * 
+ */
+
 process.env.type = 'testing';
 var should = require('should'),
     Subscription = require('../../app/models/subscription');
     
-//TODO: move tetSubscription logic to factory
+//TODO: move testSubscription logic to factory
 var testSubscription = function(props) {
         var properties = props || {};
         var list_id = properties.list_id || '586cafbf72',
@@ -19,7 +25,7 @@ var testSubscription = function(props) {
             merge_values: merge_values
         });
     };
-var testUser = require('./factory/user').subscription_test;
+var testUser = require('./factory/user.factory').subscription_test;
     
 var start = function(callback) {
         testUser.save(callback);
