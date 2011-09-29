@@ -14,6 +14,7 @@ h1. Ideas:
 
 h1. TODO:
 * finish dynamic button forms that match list merge values
+* make unit tests not collide again... currently must be run one at a time. =(
 * Merge value report on the dashboard to alert user of list-form incompatibility with facebook 
 ** ie. they require a value within the MailChimp form that is not submitted here
 * Full button-side error reporting

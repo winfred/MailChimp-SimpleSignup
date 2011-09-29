@@ -28,7 +28,6 @@ Subscription.prototype.create = function(callback) {
             callback(err);
         }
         else {
-            
             user.API().listSubscribe({
                 id: subscription.list_id,
                 email_address: subscription.email_address,
