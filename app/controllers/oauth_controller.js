@@ -26,12 +26,10 @@ module.exports.connect = function(req, res) {
                     apikey: (access_token + "-" + JSON.parse(metadata).dc)
                 });
                 user.fetchLists(function() {
-                    user.fetchListMergeVars(function() {
-                        user.fetchUserID(function() {
-                            user.save(function() {
-                                req.session.user = user;
-                                res.redirect('/dashboard');
-                            });
+                    user.fetchUserID(function() {
+                        user.save(function() {
+                            req.session.user = new User(user);
+                            res.redirect('/dashboard');
                         });
                     });
                 });

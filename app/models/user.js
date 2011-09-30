@@ -10,25 +10,27 @@ var db = require('../../config/database').db,
  * apikey: completed Oauth handshake token
  */
 var User = function(properties) {
-        build_child_objects(this, properties);
         for (var key in properties) {
+          
             this[key] = properties[key];
+          
         }
+        build_child_objects(this);
     };
 /**
  * inflates UserDoc child objects with properties from DB
  */
 
-function build_child_objects(user, properties) {
-    //define objects stored inside Couch UserDoc here
-    if (properties && properties.lists) {
-        user.lists = [];
-        for (var list in properties[key]) {
-            //create handy circular user pointer
-            list.user = this;
-            this.lists.push(new List(list));
+function build_child_objects(user) {
+    //child documents can be instantiated as seen below
+    if (user.lists){
+        for (var i=0;i<user.lists.length;i++) {
+            var list = user.lists[i];
+            //pretty sure the list var is unecessary - need to research my JS
+            user.lists[i] = new List(list);
         }
     }
+      
 }
 /**
  * Sugary DB methods
@@ -40,10 +42,12 @@ User.prototype.find_by_id = function(callback) {
             callback(err);
         }
         else {
-            for(var key in doc){
-              user[key]= doc[key];   
+            for (var key in doc) {
+                user[key] = doc[key];
             }
-            build_child_objects(user,doc);
+        
+            build_child_objects(user);
+            
             callback(null);
         }
     });
@@ -53,10 +57,7 @@ User.prototype.save = function(callback) {
     //remove any temp data stored here
     delete user.temp;
     delete user.api;
-    for (var list in user.lists) {
-        //kill handy circular user pointer
-        delete list.user;
-    }
+    
     db.save(user._id, user, function(err, doc) {
         user = new User(doc);
         callback(err);
@@ -102,26 +103,25 @@ User.prototype.fetchLists = function(callback) {
             user.lists = [];
             for (var i = 0; i < lists.total; i++) {
                 user.lists.push(new List({
-                    user: user,
                     id: lists.data[i].id,
                     name: lists.data[i].name
                 }));
             }
-            //got a better way to do async calls? i'd love to hear it since this gives List a dependency to User 
+    
             user.temp = user.temp || {};
             user.temp.calls = 0;
-            for (var i = 0; i < user.lists.length; i++) {
-                user.lists[i].fetchMergeVars(callback);
+            for (var j = 0; j < user.lists.length; j++) {
+                user.lists[j].fetchMergeVars(user,finishFetchListsAsync,callback);
             }
         }
     });
 };
 //finishes the async process
-User.prototype.finishFetchListsAsync = function(callback) {
-    if (this.lists.length == this.temp.calls) {
+function finishFetchListsAsync(user,callback) {
+    if (user.lists.length == user.temp.calls) {
         callback();
     }
-};
+}
 User.prototype.fetchUserID = function(callback) {
     var user = this;
     user.API().getAccountDetails(function(accountDetails) {
@@ -129,7 +129,6 @@ User.prototype.fetchUserID = function(callback) {
         callback();
     });
 };
-
 User.prototype.API = function() {
     if (typeof this.apikey == 'undefined') {
         console.log('User must have apikey before setting its API object');
@@ -143,6 +142,5 @@ User.prototype.API = function() {
         return this.api;
     }
 };
-
 //export model
 module.exports = User;

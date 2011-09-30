@@ -7,39 +7,43 @@ h1. Features:
 * facebook information subscription of MailChimp list
 * grabs email, fname, and lname - for now
 * standard facebook button theme
+* simple error reporting letting the user know which lists are incompatible and why
+** the list form must not require any other fields than EMAIL/FNAME/LNAME 
+** it also must use the EMAIl/FNAME/LNAME field tag convention 
+*** sorry to the people who like using FIRSTNAME as a merge tag, maybe I'll make it more flexible later
 
 h1. Ideas:
 * other fields to be grabbed from fbook, location(zip)?,website? derp?
 * Other OAuth providers?
 
 h1. TODO:
-* finish dynamic button forms that match list merge values
 * make unit tests not collide again... currently must be run one at a time. =(
-* Merge value report on the dashboard to alert user of list-form incompatibility with facebook 
-** ie. they require a value within the MailChimp form that is not submitted here
 * Full button-side error reporting
 * scrolling button text? UX ideas
 * style admin/dashboard pages
 * dashboard button customization code (button-width slider, custom text)
 
 
-h1. Bullshit:
-* Facebook requires "localhost" dev application URLs
-* MailChimp requires "127.0.0.1" dev application URLs
-* I'm not sure if a simplesignup.dev workaround will work given a likely "invalid domain" error on the app-registration side
-* other ideas?
 
 h1. Dev environment setup:
 # create couchDBs somewhere (iriscouch.com) and hookup to config/database.js
 # register MailChimp dev/pro Oauth applications and hookup to config/oauth.js
 # plug in API keys for each MC account for async testing in test/models/factory/user.js
-# set up proper facebook app ids in app/server.js
+# set up proper facebook app ids and basepaths in app/server.js
 # $ npm install
 # expresso test/models/*
 # expresso test/controllers/*
 
-h4. Some notes about that shit for right now:
+h4. Some notes about that:
 * follow corresponding *Example.js for 1-3 above
 * user_id and list_id in test/models/subscription have not been moved to factory yet 
 ** I plan on moving them when I implement dynamic merge values
 * the same goes for statically coded ids in test/controllers/subscription_controller
+* The MC Oauth application requires 127.0.0.1 for dev testing redirect_urls
+* Facebook apps require localhost for dev testing
+** as such, there are now two URLs to be specified in the development env section of app/server.js to help match both of these requirements
+** server.basepath is used in dev to generate MC-specific links
+** server.facebook_basepath is used in dev to make the button UI work from views/welcome/dashboard
+
+h1. design notes
+* this is some kind of bastardized MVC/Model2 thing... hopefully it gets the point across

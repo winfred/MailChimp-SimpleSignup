@@ -1,15 +1,37 @@
+
 <h1> Get ur codez </h1>
 
 <dl>
-<% for(var list in user.lists){ %>
-    <dt>List: <%=user.lists[list]%></dt>
+<% for(var i=0;i<lists.length;i++){ %>
+<% var list = lists[i]; %>
+
+    <dt>List: <%=list.name%></dt>
 <dd>
-    <iframe src="<%=server.basepath%>/button?signup_prompt=Newsletter%20Signup&u=<%=user._id%>&id=<%=list%>" width="170" height="30" frameBorder="0"></iframe>
+
+<% if (list.bad_merge_vars.length == 0){ %>
+    <p>This list will work! =) </p> 
+
+
+<br />
+
+    <iframe src="<%=server.facebook_basepath%>/button?signup_prompt=Newsletter%20Signup&u=<%=user_id%>&id=<%=list.id%>" width="170" height="30" frameBorder="0"></iframe>
     <br />
     
-    <code><%=escape("<iframe src='"+server.basepath+"/button?signup_prompt=Newsletter%20Signup&u="+user._id+"&id="+list+"' width='170' height='30' frameBorder='0'></iframe>")%></code>
-    </dd>
+    <code><%=escape("<iframe src='"+server.facebook_basepath+"/button?signup_prompt=Newsletter%20Signup&u="+user_id+"&id="+list.id+"' width='170' height='30' frameBorder='0'></iframe>")%></code>
+    
 <hr />
+<% }else{ %>
+<div class="compatibility">
+<p> This list is not compatible with the simple signup button because of the following fields.</p>
+<ul>
+<% for (var j=0;j<list.bad_merge_vars.length;j++){ %>
+    <%var bad_merge_var = list.bad_merge_vars[j]; %>
+    <li>Field "<%=bad_merge_var.name%>" of type "<%=bad_merge_var.field_type%>"  is required and is not supportable with facebook data at this time. </li>
+<% } %>
+</ul>
+</div>
 
-<%}%>
+<% } %>
+</dd>
+<%} %>
 </dl>

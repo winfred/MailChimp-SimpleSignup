@@ -15,8 +15,8 @@ var testSubscription = function(props) {
             user_id = properties.user_id || '5f96e5e279c0586e9576c5d88',
             email_address = properties.email_address || 'emailtesting@mailchimp.com',
             merge_values = {
-                MERGE1: 'Freddie',
-                MERGE2: 'Chimpenheimer'
+                FNAME: 'Freddie',
+                LNAME: 'Chimpenheimer'
             };
         return new Subscription({
             list_id: list_id,

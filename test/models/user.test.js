@@ -98,31 +98,49 @@ module.exports = {
             user.lists[0].should.have.property("merge_vars");
             user.lists[0].should.have.property("name");
             user.lists[0].should.have.property("id");
-            
-            calls++;
-            console.log('finished: User#fetchListIDs');
+            user.save(function() {
+                user.lists.should.be.an.instanceof(Array);
+                user.lists.length.should.be.above(0);
+                user.lists[0].should.have.property("merge_vars");
+                user.lists[0].should.have.property("name");
+                user.lists[0].should.have.property("id");
+                user.find_by_id(function() {
+                    user.lists.should.be.an.instanceof(Array);
+                    user.lists.length.should.be.above(0);
+                    user.lists[0].should.have.property("merge_vars");
+                    user.lists[0].should.have.property("name");
+                    user.lists[0].should.have.property("id");
+                    calls++;
+                    console.log('finished: User#fetchListIDs');
+                });
+            })
         });
         beforeExit(function() {
             calls.should.eql(1);
         });
     },
-    
-    'save clears any temp values': function(beforeExit){
+    'save clears any temp values': function(beforeExit) {
         var calls = 0;
-        var user = testUser({id: "Freddie", temp: {"this": "is", some: "temp", shit: "yo"}});
-        user.save(function(){
+        var user = testUser({
+            id: "Freddie",
+            temp: {
+                "this": "is",
+                some: "temp",
+                shit: "yo"
+            }
+        });
+        user.save(function() {
             should.not.exist(user.temp);
             should.not.exist(user.api);
-            user.find_by_id(function(){
-               should.not.exist(user.temp);
-               should.not.exist(user.api);
-               calls++;
-               console.log("finished: User#save clears any temp values");
+            user.find_by_id(function() {
+                should.not.exist(user.temp);
+                should.not.exist(user.api);
+                calls++;
+                console.log("finished: User#save clears any temp values");
             });
         });
         beforeExit(function() {
             calls.should.eql(1);
         });
-        
     }
 };

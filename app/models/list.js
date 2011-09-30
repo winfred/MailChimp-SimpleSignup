@@ -14,22 +14,22 @@ var List = function(properties) {
     };
 //the fetch isn't actually made in this method, which is unclear... perhaps there's a better name for this process
 //Async calls made here
-List.prototype.fetchMergeVars = function(callback) {
+List.prototype.fetchMergeVars = function(user,finishCallback,finalCallback) {
     var list = this;
-    if (typeof this.user.lists == 'undefined') {
-        this.user.fetchLists(callback);
+    if (typeof user.lists == 'undefined') {
+        user.fetchLists(callback);
         if (process.env.type != 'testing') {
             console.log("Warning: merge vars fetched before lists... you're covered this time but it is unadvised.");
         }
         return false;
     }
-    list.user.API().listMergeVars({
+    user.API().listMergeVars({
         id: list.id
     }, function(merge_vars) {
         list.merge_vars = merge_vars;
-        //dependency on user object =(
-        list.user.temp.calls++;
-        list.user.finishFetchListsAsync(callback);
+        user.temp.calls++;
+        //passing user object to avoid circular JSON references
+        finishCallback(user,finalCallback);
     });
 };
 /**
@@ -41,7 +41,7 @@ List.prototype.fetchMergeVars = function(callback) {
  * 
  */
 List.prototype.testCompatibility = function(callback) {
-    var badMergeVars = []
+    var badMergeVars = [];
     for (var i = 0; i < this.merge_vars.length; i++) {
         var merge_var = this.merge_vars[i];
         if (merge_var.req) {
