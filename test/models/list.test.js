@@ -2,16 +2,16 @@ process.env.type = 'testing';
 var should = require('should'),
     testList = require('./factory/list.factory').list_test,
     List = require('../../app/models/list');
-//test count 1
+    testUser = require('./factory/user.factory').subscription_test;
+//test count 2
 module.exports = {
     'fetchMergeVars': function(beforeExit) {
         var calls = 0;
         var list = testList;
-        list.user.temp = {};
-        list.user.lists = [list];
-        list.user.temp.calls = 0;
-        list.user.temp.callback = beforeExit;
-        list.fetchMergeVars(function() {
+        testUser.temp = {};
+        testUser.lists = [list];
+        testUser.temp.calls = 0;
+        list.fetchMergeVars(testUser,beforeExit,function() {
             should.exist(list.merge_vars);
             list.merge_vars.should.be.an.instanceof(Array);
             list.merge_vars.length.should.be.above(0);
