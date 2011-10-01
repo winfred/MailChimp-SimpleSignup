@@ -15,14 +15,11 @@ h1. Features:
 h1. Ideas:
 * other fields to be grabbed from fbook, location(zip)?,website? derp?
 * Other OAuth providers?
+* dashboard button customization code (button-width slider, custom text)
 
 h1. TODO:
 * make unit tests not collide again... currently must be run one at a time. =(
-* Full button-side error reporting
-* scrolling button text? UX ideas
 * style admin/dashboard pages
-* dashboard button customization code (button-width slider, custom text)
-
 
 
 h1. Dev environment setup:
@@ -37,7 +34,6 @@ h1. Dev environment setup:
 h4. Some notes about that:
 * follow corresponding *Example.js for 1-3 above
 * user_id and list_id in test/models/subscription have not been moved to factory yet 
-** I plan on moving them when I implement dynamic merge values
 * the same goes for statically coded ids in test/controllers/subscription_controller
 * The MC Oauth application requires 127.0.0.1 for dev testing redirect_urls
 * Facebook apps require localhost for dev testing
