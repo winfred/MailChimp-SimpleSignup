@@ -1,5 +1,5 @@
 var express = require('express'),
-    urlpaser = require('url')
+    urlpaser = require('url');
        
 server = module.exports = express.createServer();
 
@@ -9,7 +9,7 @@ server.configure(function(){
   server.set('view engine', 'ejs');
   server.use(express.bodyParser());
   server.use(express.cookieParser());
-  server.use(express.session({ secret: "crandlefon&p7q5linB0xfun" }));
+  server.use(express.session({ secret: "snarglefrockUf&p7q5linB0xfun" }));
   server.use(express.methodOverride());
   server.use(server.router);
   server.use(express.static(__dirname + '/public'));
