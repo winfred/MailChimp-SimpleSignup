@@ -20,28 +20,26 @@
                 border-radius: 4px;
                 border-bottom: solid 1px #1A356E;
                 color: white;
-                display: block;
-                height: 22px;
-                text-align: center;
                 overflow: hidden;
+                                
                 
                 
             }
-            .subscribe>a
-            {
-                color: white;
+            .button {
+                 cursor: pointer;
+                 color: white;
                 text-decoration: none;
                 font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
                 font-weight: bold;
-                padding: 0 0 0 23px;
                 text-shadow: none;
-                
-            }
+                margin-left: 20px;
+                overflow: hidden;
+             }
             
             </style>
             
-            <div class="subscribe" >
-                <a href="#" id="fb-submit" data-prompt="<%=signup_prompt%>"><%=signup_prompt%></a>
+            <div class="subscribe" data-prompt="<%=signup_prompt%>">
+                <marquee behavior="scroll" scrollamount="1" direction="left" width="170" height="20" > <%=signup_prompt%></marquee>
             </div>
             
             
@@ -65,31 +63,31 @@
                    e.async = true;
                    document.getElementById('fb-root').appendChild(e);
                }());
-                $(document).ready(function () {
-                    
+                $(document).ready(function() {
                     // FB Connect action
-                    $('#fb-submit').click(function () {
+                    
+                    $('marquee').marquee('button').mouseover(function() {
+                        $(this).trigger('stop');
+                     
+                        
+                    }).mouseout(function() {
+                        $(this).trigger('start');
+                       
+                        
+                    }).mousedown(function() {
                         //postInfo(displayResponse);
-                       
-                       
                         FB.login(function(response) {
                             if (response.authResponse) {
-                                gatherInfo(postInfo);        
-                            } else {
+                                gatherInfo(postInfo);
+                            }
+                            else {
                                 console.log('User cancelled login or did not fully authorize.');
                             }
-                        }, {scope: 'email'});
-                      
-
+                        }, {
+                            scope: 'email'
+                        });
                     });
-                
-                    $('#fb-submit').hover(function(){
-                        $(this).text("Subscribe now!");
-                        
-                        },function(){
-                        $(this).text('<%=signup_prompt%>');   
-                        
-                    });
+                    
                     
                     
                    
@@ -110,18 +108,18 @@
                 };
                 var displayResponse = function(data, textStatus, jqXHR){
                     
-                    //TODO: Update button text to show thank you or response
+                    
                     if (data.result.error){
                         //TODO: FULL ERROR HANDLING
                         if(data.result.code == 214){
-                          $("#fb-submit").text("Already Subbed");  
+                          $(".button>div").text("Already subscribed with "+data.email_address);  
                         }
                         else{
-                          $("#fb-submit").text(data.result.error);  
+                          $(".button>div").text(data.result.error);  
                         }
                      
                     }else{
-                      $("#fb-submit").text("Thank you! " + data.email_address);   
+                      $(".button>div").text("Thank you! Check for confirmation at " + data.email_address);   
                     }
                     //TODO: hideLoading
                         
