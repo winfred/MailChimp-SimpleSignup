@@ -18,6 +18,7 @@ h1. Ideas:
 * dashboard button customization code (button-width slider, custom text)
 
 h1. TODO:
+* optimization
 * make unit tests not collide again... currently must be run one at a time. =(
 * style admin/dashboard pages
 
