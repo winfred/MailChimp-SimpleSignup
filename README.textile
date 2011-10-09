@@ -1,5 +1,5 @@
 MailChimp Simple Signup
-Version: ~0.0.1
+Version: ~0.0.2b
 
 
 h1. Features:
@@ -18,8 +18,8 @@ h1. Ideas:
 * dashboard button customization code (button-width slider, custom text)
 
 h1. TODO:
+* jquery optimization
 * make unit tests not collide again... currently must be run one at a time. =(
-* style admin/dashboard pages
 
 
 h1. Dev environment setup:
