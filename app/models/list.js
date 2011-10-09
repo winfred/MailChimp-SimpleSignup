@@ -3,7 +3,6 @@ var User = require('./user'),
 /**
  * List Object
  * properties:
- *  user: pointer to user object
  *  name: list name
  *  id: list id
  */

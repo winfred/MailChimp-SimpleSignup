@@ -32,4 +32,14 @@ module.exports.dashboard = function(req, res) {
             });
         //});
     }
+
+};
+module.exports.faq = function(req,res){
+    res.render('welcome/faq');
+    
+};
+module.exports.logout = function(req,res){
+    delete req.session.user;
+    res.redirect('/');
+    
 };

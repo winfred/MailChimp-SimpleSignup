@@ -25,6 +25,7 @@ module.exports.connect = function(req, res) {
                 var user = new User({
                     apikey: (access_token + "-" + JSON.parse(metadata).dc)
                 });
+               
                 user.fetchLists(function() {
                     user.fetchUserID(function() {
                         user.save(function() {
