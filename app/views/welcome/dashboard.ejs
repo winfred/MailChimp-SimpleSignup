@@ -1,5 +1,6 @@
 
-<h1> Get ur button codez </h1>
+<div class = "span10"> 
+<h2>Get the button embed code</h2>
 
 <dl>
 <% for(var i=0;i<lists.length;i++){ %>
@@ -14,10 +15,10 @@
 
 <br />
 
-    <iframe src="<%=server.facebook_basepath%>/button?signup_prompt=Newsletter%20Signup%20from%20Facebook&u=<%=user_id%>&id=<%=list.id%>" width="170" height="23" frameBorder="0"></iframe>
+    <iframe src="<%=server.facebook_basepath%>/button?signup_prompt=Newsletter%20Signup%20through%20Facebook&u=<%=user_id%>&id=<%=list.id%>" width="170" height="23" frameBorder="0"></iframe>
     <br />
     
-    <code><%=escape("<iframe src='"+server.facebook_basepath+"/button?signup_prompt=Newsletter%20Signup%20from%20Facebook&u="+user_id+"&id="+list.id+"' width='170' height='23' frameBorder='0'></iframe>")%></code>
+    <pre><%=escape("<iframe src='"+server.facebook_basepath+"/button?signup_prompt=Newsletter%20Signup%20through%20Facebook&u="+user_id+"&id="+list.id+"' width='170' height='23' frameBorder='0'></iframe>")%></pre>
     
 <hr />
 <% }else{ %>
@@ -33,5 +34,8 @@
 
 <% } %>
 </dd>
-<%} %>
+<%} %> 
 </dl>
+</div>
+ 
+

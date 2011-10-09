@@ -46,6 +46,8 @@ var controller = require('./controller');
 
 server.get('/',controller.welcome.login);
 server.get('/dashboard',controller.welcome.dashboard);
+server.get('/faq',controller.welcome.faq);
+server.get('/logout',controller.welcome.logout);
 server.get('/connect',controller.oauth.connect);
 server.get('/fb-signup?',controller.naive.show);
 server.get('/button',controller.button.show);

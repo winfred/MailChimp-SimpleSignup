@@ -10,16 +10,17 @@ var db = require('../../config/database').db,
  * apikey: completed Oauth handshake token
  */
 var User = function(properties) {
-        for (var key in properties) {
-          
-            this[key] = properties[key];
-          
-        }
-        build_child_objects(this);
+        build_objects_from_document(this,properties);
     };
-/**
- * inflates UserDoc child objects with properties from DB
- */
+    
+function build_objects_from_document(object,properties){
+    
+    for (var key in properties) {
+        object[key] = properties[key];
+    }
+    build_child_objects(object);   
+}
+
 
 function build_child_objects(user) {
     //child documents can be instantiated as seen below
@@ -42,11 +43,7 @@ User.prototype.find_by_id = function(callback) {
             callback(err);
         }
         else {
-            for (var key in doc) {
-                user[key] = doc[key];
-            }
-        
-            build_child_objects(user);
+            build_objects_from_document(user,doc);
             
             callback(null);
         }
@@ -59,7 +56,7 @@ User.prototype.save = function(callback) {
     delete user.api;
     
     db.save(user._id, user, function(err, doc) {
-        user = new User(doc);
+        build_objects_from_document(user,doc);
         callback(err);
     });
 };

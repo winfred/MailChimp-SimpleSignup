@@ -1,5 +1,5 @@
 MailChimp Simple Signup
-Version: ~0.0.1
+Version: ~0.0.2b
 
 
 h1. Features:
@@ -18,9 +18,8 @@ h1. Ideas:
 * dashboard button customization code (button-width slider, custom text)
 
 h1. TODO:
-* optimization
+* jquery optimization
 * make unit tests not collide again... currently must be run one at a time. =(
-* style admin/dashboard pages
 
 
 h1. Dev environment setup:
@@ -30,7 +29,7 @@ h1. Dev environment setup:
 # set up proper facebook app ids and basepaths in app/server.js
 # $ npm install
 # expresso test/models/*
-# expresso test/controllers/*
+# expresso test/controllers/* 
 
 h4. Some notes about that:
 * follow corresponding *Example.js for 1-3 above
