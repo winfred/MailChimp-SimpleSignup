@@ -8,7 +8,7 @@ var Subscription = function(properties) {
         this.user_id = properties.user_id;
         this.email_address = properties.email_address;
         this.merge_values = properties.merge_values;
-        if (process.env.type == 'testing' || process.env.type == 'development') {
+        if (properties.opt_in == "single") {
                 this.double_optin = false;
             }
             else {

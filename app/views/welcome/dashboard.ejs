@@ -1,26 +1,156 @@
+<style>
+#list-accordion h3 a{
+	text-align: center;
+	padding: 0 25px;
+	color: #444;
+	border: none;
+	text-shadow: 0 1px 1px rgba(255,255,255,0.85);
+	background-image: -webkit-gradient(linear, 0%,0%,0% 100%, from(#fff), to(#bbb));
+	background-image: -moz-linear-gradient(0% 100% 90deg, #bbb, #fff);
+	background-color: #eee;
+	-webkit-border-radius: 23px;
+	-moz-border-radius: 23px;
+	-o-border-radius: 23px;
+	border-radius: 23px;
+	-webkit-box-shadow: 0 2px 5px rgba(0,0,0, 1.7);
+	-moz-box-shadow: 0 2px 5px rgba(0,0,0, 1.7);
+	box-shadow: 0 2px 5px rgba(0,0,0, 1.7);
+	display: block;
 
+}
+//arg I wish I knew more CSS
+h3 a:focus {
+	background-image: -webkit-gradient(linear, 0%,0%,0% 100%, from(#fff), to(#999));
+	background-image: -moz-linear-gradient(0% 100% 120deg, #bbb, #999);
+
+}
+.list-button-config {
+	padding: 18px 35px;
+	
+}
+.slider{
+	width: 525px;
+	
+}
+
+
+
+</style>
 <div class = "span10"> 
-<h2>Get the button embed code</h2>
+<h2>Customize Your List's Button</h2>
 
-<dl>
+<div id="list-accordion">
+    
 <% for(var i=0;i<lists.length;i++){ %>
 <% var list = lists[i]; %>
 
-    <dt>List: <%=list.name%></dt>
-<dd>
+    <h3><a href="#"><%=list.name%></a></h3>
+	<div class="list-button-config" id="list-<%=i%>">
 
 <% if (list.bad_merge_vars.length == 0){ %>
     <p>This list will work! =) </p> 
-
-
 <br />
+	<form  class="button-form">
+	<fieldset>
+		<input type="hidden" name="u" value="<%=user_id%>" />
+		<input type="hidden" name="id" value="<%=list.id%>" />
+		
+	<div class="clearfix">
+		<label for="signup_prompt">Button Text</label>
+		<div class="input"><input name="signup_prompt" 
+			type="text" value="Newsletter Signup" required /></div>
+	</div>
+	<div class="clearfix">
+		<label for="color">Color</label>
+		<div class="input"><input name="color" class="color-picker" type="text" width="10px" value="5F78AB"/></div>
+	</div>
+	<div class="clearfix">
+		<label for="s_opt">Opt-in Type</label>
+		<div class="input">
+			<ul class="inputs-list">
+			                <li>
+			                  <label>
+			                    <input type="radio"  name="opt_in" value="single">
+			                    <span>Single</span>
+			                  </label>
+			                </li>
+			                <li>
+			                  <label>
+			                    <input type="radio" checked="" name="opt_in" value="double">
+			                    <span>Double</span>
+			                  </label>
+			                </li>
+			              </ul>
+		</div>
+	</div>
+	<div class="clearfix">
+		<label for="still">Scrolling Text</label>
+		<div class="input">
+			<ul class="inputs-list">
+			                <li>
+			                  <label>
+			                    <input type="radio"  name="still" value="true">
+			                    <span>Still</span>
+			                  </label>
+			                </li>
+			                <li>
+			                  <label>
+			                    <input type="radio" checked="" name="still" value="false">
+			                    <span>Scrolling</span>
+			                  </label>
+			                </li>
+			              </ul>
+		</div>
+	</div>
+	<div class="clearfix">
+		<label for="width">Width</label>
+		
+		<div class="input">
+			<input type="text" name="width" value="170" style="width: 50px;"/></input> pixels	
+		</div>
+	</div>
+	<div id="slider-<%=i%>" class="slider"></div>
+	<br />
+	<div class="clearfix">
+		<label for="fontsize">Font Size</label>
+		<div class="input">
+				<select name="fontsize" style="width: 50px;">
+					<option>12</option>
+					<option>14</option>
+					<option>16</option>
+					<option>18</option>
+					<option>20</option>
+					<option>22</option>
+					<option>24</option>
+					<option>26</option>
+					<option>28</option>
+					<option>30</option>
+					<option>32</option>
+					<option>34</option>
+					<option>36</option>
+					<option>38</option>
+					<option>40</option>
+					<option>42</option>
+					<option>44</option>
+					<option>44</option>
+					<option>46</option>
+				</select>
+		</div>
+	</div>
+	<div class="clearfix">
+		
+		<div class="input"></div>
+	</div>	
+	
+	<input type="submit" class="btn primary" style="margin-left: 400px;" value="Update Preview"></input>	
+	</form>
+	
+	<h4>Preview</h4>
+	
+	<iframe id="list-<%=i%>-iframe"  src="<%=server.facebook_basepath%>/button?signup_prompt=Newsletter&u=<%=user_id%>&id=<%=list.id%>&color=5F78AB" frameBorder="0" width="170"></iframe>
 
-    <iframe src="<%=server.facebook_basepath%>/button?signup_prompt=Newsletter%20Signup%20through%20Facebook&u=<%=user_id%>&id=<%=list.id%>" width="170" height="23" frameBorder="0"></iframe>
-    <br />
     
-    <pre><%=escape("<iframe src='"+server.facebook_basepath+"/button?signup_prompt=Newsletter%20Signup%20through%20Facebook&u="+user_id+"&id="+list.id+"' width='170' height='23' frameBorder='0'></iframe>")%></pre>
     
-<hr />
 <% }else{ %>
 <div class="compatibility">
 <p> This list is not compatible with the simple signup button because of the following fields.</p>
@@ -30,12 +160,51 @@
     <li>Field "<%=bad_merge_var.name%>" of type "<%=bad_merge_var.field_type%>"  is required and is not supportable with facebook data at this time. </li>
 <% } %>
 </ul>
-</div>
+</div><!-- close compatibility -->
 
 <% } %>
-</dd>
+</div> <!-- close list-button-config -->
 <%} %>
-</dl>
-</div>
- 
+</div><!-- close list-accordion -->
+
+</div><!-- close span10 -->
+<script>
+$(document).ready(function(){
+	$('#list-accordion').accordion();
+	$('.color-picker').wheelColorPicker({format: 'hex'});
+	$('.slider').slider({
+		animate: false,
+		max: 1000,
+		min: 50,
+		value: 170,
+		slide: function(event, ui) {	
+			//grab parent div for list relativity
+			var list_div = $(ui.handle).parents(".list-button-config")[0];
+			var val = ui.value;
+			//set form's hidden width
+			$('#'+$(list_div).attr('id')+' input[name="width"]').val(val);
+			//set iframes width 
+			$('#'+$(list_div).attr('id')+' iframe').attr('width',val);
+			
+			}
+		
+	});
+	
+	
+});
+$('.button-form').each(function(index){
+	var form = this;
+	$(this).submit(function(e){
+		//grab list_id from form, serialize input into new iframe src and reload
+		var list_id = $(form).parent().attr('id');
+		var src = "<%=server.facebook_basepath%>/button?"+$(form).serialize();
+		$("#"+list_id+" iframe").attr('src', src);
+		var fontsize = $('#'+list_id+' select[name="fontsize"]').val();
+		console.log(fontsize);
+		$('#'+list_id+' iframe').attr('height',Number(fontsize)+5);
+		return false;
+	});
+});
+
+</script>
 
