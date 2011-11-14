@@ -14,7 +14,7 @@
                 <form action="/subscription" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank">
                     <input type="hidden" name="u" value="<%=options.u%>" /> 
                     <input type="hidden" name="id" value="<%=options.id%>" /> 
-					<input type="hidden" name="s_opt" value="<%= options.opt_in %>">
+					<input type="hidden" name="opt_in" value="<%= options.opt_in %>">
                     <input type="text" value="" name="email_address"  id="mc-EMAIL"  />
                     <input type="text" name="merge_values[FNAME]" id="mc-FNAME"  value="" /> 
                     <input type="text" name="merge_values[LNAME]" id="mc-LNAME"  value="" /> 
@@ -66,11 +66,16 @@
 				
                 
             }
-			.button div  {
-				padding-top: <%= (options.style == "cozy" ? (options.fontsize / 
-					5)+"px" : "0")%>;
+			.centered  {
+				<% if (options.style =="cozy"){ %>
+				vertical-align: middle;
+				padding-top: <%= (options.fontsize / 5)+'px' %>;	
+				<% } %>
 				padding-left: 8px;
+				//
+
 			}
+			
 			
             
             </style>
@@ -91,12 +96,11 @@
 					height: <%= (Number(options.fontsize)+(options.fontsize < 15 ? 2 : 4)) * 
 						style_multiplier || 16 %>px;"
 						class="button">
-				
-				 <div style="
-					margin-left: <%= options.facebook_logo != 'false' ? 
-					(((Number(options.fontsize)+6) * style_multiplier)+'px') : '0' %>;
-				
-				"><%=options.signup_prompt%></div></marquee>
+				 
+				 <div style="margin-left: <%= options.facebook_logo != 'false' ? 
+						(((Number(options.fontsize)+6) * style_multiplier)+'px') : '0' %>;
+						
+				"><span class="centered"><%=options.signup_prompt%></span></div></marquee>
 				
             </div>
             <script type="text/javascript">
@@ -126,7 +130,8 @@
                     $(document).mousedown(connectFacebook);
                 });
 				var connectFacebook = function() {
-					$(".button>div").text("loading...");
+					
+					$(".centered").text("loading...");
                     FB.login(function(response) {
                         if (response.authResponse) {
                             gatherInfo(subscribe);
@@ -155,14 +160,14 @@
                 };
                 var displayResponse = function(data, textStatus, jqXHR){
                     
-                    
+                   
                     if (data.result.error){
                         //TODO: FULL ERROR HANDLING
                         if(data.result.code == 214){
-                          $(".button>div").text("Already subscribed with "+data.email_address);  
+                          $(".centered").text("Already subscribed with "+data.email_address);  
                         }
                         else{
-                          $(".button>div").text(data.result.error);  
+                          $(".centered").html(data.result.error);  
                         }
 						console.log(data.result);
                      
@@ -174,14 +179,13 @@
                       		response = "Thank you! Check for confirmation at " + data.email_address;  
  						<% } %>
 						console.log(response);
-						$(".button>div").text(response);						
+						$(".centered").text(response);						
                     }   
  					<%if (options.still == "true") { %>
 						enableScroll();
 					<% } %>
                 };
 				var enableScroll = function(){
-					$('.button>div').css('margin-top',"0");
 					$('marquee').attr('behavior','scroll')
 					.marquee('button');
 					
