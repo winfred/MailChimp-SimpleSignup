@@ -37,8 +37,13 @@ h3 a:focus {
 
 </style>
 <div class = "span10"> 
-<h2>Customize Your List's Button</h2>
+<h2>Choose your List</h2>
 
+<div id="code-modal" title="Button Code" >
+          
+              <pre></pre>
+
+          </div>
 <div id="list-accordion">
     
 <% for(var i=0;i<lists.length;i++){ %>
@@ -48,69 +53,54 @@ h3 a:focus {
 	<div class="list-button-config" id="list-<%=i%>">
 
 <% if (list.bad_merge_vars.length == 0){ %>
-    <p>This list will work! =) </p> 
-<br />
 	<form  class="button-form">
 	<fieldset>
+		
 		<input type="hidden" name="u" value="<%=user_id%>" />
 		<input type="hidden" name="id" value="<%=list.id%>" />
-		
+		<div class="clearfix">
+			<label for="s_opt">Opt-in Type</label>
+			<div class="input">
+				<ul class="inputs-list">
+				                <li>
+				                  <label>
+				                    <input type="radio"  name="opt_in" value="single">
+				                    <span>Single</span>
+				                  </label>
+				                </li>
+				                <li>
+				                  <label>
+				                    <input type="radio" checked="" name="opt_in" value="double">
+				                    <span>Double</span>
+				                  </label>
+				                </li>
+				              </ul>
+			</div>
+		</div>	
 	<div class="clearfix">
 		<label for="signup_prompt">Button Text</label>
 		<div class="input"><input name="signup_prompt" 
-			type="text" value="Newsletter Signup" required /></div>
+			type="text" value="Newsletter" required /></div>
 	</div>
 	<div class="clearfix">
-		<label for="color">Color</label>
-		<div class="input"><input name="color" class="color-picker" type="text" width="10px" value="5F78AB"/></div>
+		<label for="bg_color">Background Color</label>
+		<div class="input"><input name="bg_color" class="color-picker" type="text" width="10px" value="5F78AB"/></div>
 	</div>
 	<div class="clearfix">
-		<label for="s_opt">Opt-in Type</label>
+		<label for="color">Text Color</label>
+		<div class="input"><input name="color" class="color-picker" type="text" width="10px" value="FFFFFF"/></div>
+	</div>
+	<div class="clearfix">
+		<label for="fontsize">Font</label>
 		<div class="input">
-			<ul class="inputs-list">
-			                <li>
-			                  <label>
-			                    <input type="radio"  name="opt_in" value="single">
-			                    <span>Single</span>
-			                  </label>
-			                </li>
-			                <li>
-			                  <label>
-			                    <input type="radio" checked="" name="opt_in" value="double">
-			                    <span>Double</span>
-			                  </label>
-			                </li>
-			              </ul>
+			<select name="font">
+				<option value="lucida">Lucida Grande (from Facebook)</option>
+				<option value="tahoma">Tahoma</option>
+				<option value="verdana">Verdana</option>
+				<option value="arial">Arial</option>
+			</select>
 		</div>
 	</div>
-	<div class="clearfix">
-		<label for="still">Scrolling Text</label>
-		<div class="input">
-			<ul class="inputs-list">
-			                <li>
-			                  <label>
-			                    <input type="radio"  name="still" value="true">
-			                    <span>Still</span>
-			                  </label>
-			                </li>
-			                <li>
-			                  <label>
-			                    <input type="radio" checked="" name="still" value="false">
-			                    <span>Scrolling</span>
-			                  </label>
-			                </li>
-			              </ul>
-		</div>
-	</div>
-	<div class="clearfix">
-		<label for="width">Width</label>
-		
-		<div class="input">
-			<input type="text" name="width" value="170" style="width: 50px;"/></input> pixels	
-		</div>
-	</div>
-	<div id="slider-<%=i%>" class="slider"></div>
-	<br />
 	<div class="clearfix">
 		<label for="fontsize">Font Size</label>
 		<div class="input">
@@ -137,19 +127,88 @@ h3 a:focus {
 				</select>
 		</div>
 	</div>
+
 	<div class="clearfix">
-		
-		<div class="input"></div>
-	</div>	
+		<label for="still">Scrolling Text</label>
+		<div class="input">
+			<ul class="inputs-list">
+			                <li>
+			                  <label>
+			                    <input type="radio" checked="" name="still" value="true">
+			                    <span>Still</span>
+			                  </label>
+			                </li>
+			                <li>
+			                  <label>
+			                    <input type="radio" name="still" value="false">
+			                    <span>Scrolling</span>
+			                  </label>
+			                </li>
+			              </ul>
+		</div>
+	</div>
+	<div class="clearfix">
+		<label for="still">Facebook Logo</label>
+		<div class="input">
+			<ul class="inputs-list">
+			                <li>
+			                  <label>
+			                    <input type="radio" checked="" name="facebook_logo" value="true">
+			                    <span>On</span>
+			                  </label>
+			                </li>
+			                <li>
+			                  <label>
+			                    <input type="radio"  name="facebook_logo" value="false">
+			                    <span>Off</span>
+			                  </label>
+			                </li>
+			              </ul>
+		</div>
+	</div>
 	
-	<input type="submit" class="btn primary" style="margin-left: 400px;" value="Update Preview"></input>	
+	<div class="clearfix">
+		<label for="fontsize">Whitespace</label>
+		<div class="input">
+				<ul class="inputs-list">
+					
+				                <li>
+				                  <label>
+				                    <input type="radio" checked=""  name="style" value="sleek">
+				                    <span>Sleek</span>
+				                  </label>
+				                </li>
+				                <li>
+				                  <label>
+				                    <input type="radio"  name="style" value="cozy">
+				                    <span>Cozy</span>
+				                  </label>
+				                </li>
+				              </ul>
+		</div>
+	</div>	
+
+	<div class="clearfix">
+		<label for="width">Width</label>
+		
+		<div class="input">
+			<input type="text" name="width" value="170" style="width: 50px;"/></input> pixels	
+		</div>
+	</div>
+	<div id="slider-<%=i%>" class="slider"></div>
+	
+	<h3>Preview</h3>
+	
+	<iframe id="list-<%=i%>-iframe"  src="<%=server.facebook_basepath%>/button?signup_prompt=Newsletter&u=<%=user_id%>&id=<%=list.id%>&bg_color=5F78AB&fontsize=14&still=true" frameBorder="0" width="118" height="20"></iframe>
+
+	<br /><br />
+	<div>
+	<input type="submit" class="btn" style="float:right;" onclick="openDialog();" value="Get Code"></input>
+	<input type="submit" class="btn danger" style="float:right; display: inline;" value="Update Preview"></input>	
+	</div>
 	</form>
 	
-	<h4>Preview</h4>
 	
-	<iframe id="list-<%=i%>-iframe"  src="<%=server.facebook_basepath%>/button?signup_prompt=Newsletter&u=<%=user_id%>&id=<%=list.id%>&color=5F78AB" frameBorder="0" width="170"></iframe>
-
-    
     
 <% }else{ %>
 <div class="compatibility">
@@ -170,7 +229,7 @@ h3 a:focus {
 </div><!-- close span10 -->
 <script>
 $(document).ready(function(){
-	$('#list-accordion').accordion();
+	$('#list-accordion').accordion({autoHeight: false});
 	$('.color-picker').wheelColorPicker({format: 'hex'});
 	$('.slider').slider({
 		animate: false,
@@ -189,6 +248,7 @@ $(document).ready(function(){
 			}
 		
 	});
+	$('#code-modal').dialog({autoOpen: false});
 	
 	
 });
@@ -200,11 +260,16 @@ $('.button-form').each(function(index){
 		var src = "<%=server.facebook_basepath%>/button?"+$(form).serialize();
 		$("#"+list_id+" iframe").attr('src', src);
 		var fontsize = $('#'+list_id+' select[name="fontsize"]').val();
-		console.log(fontsize);
-		$('#'+list_id+' iframe').attr('height',Number(fontsize)+5);
+		var style = $('#'+list_id+' input[name="style"]:checked').val();
+		
+		$('#'+list_id+' iframe').attr('height',(Number(fontsize)+ 8) * (style == "cozy" ? 1.5 : 1) );
+		var html = $("#"+list_id+' iframe')[0].outerHTML;
+		$('#code-modal pre').text(html);
 		return false;
 	});
 });
-
+var openDialog = function(){
+	$('#code-modal').dialog('open');
+	return false;
+}
 </script>
-

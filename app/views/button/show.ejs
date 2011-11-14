@@ -22,55 +22,83 @@
                 </form>
             </div>
             <style>
+			<% var style_multiplier = (options.style == 'cozy' ? 1.5 : 1); %>
             
-            
+            html{
+				min-height:  <%= Number(options.fontsize) * style_multiplier || 20 %>;
+			}
             .subscribe
             {
-                background: #<%= options.color || "5F78AB"%>;
+                background: #<%= options.bg_color || "5F78AB"%>;
                 border-radius: 4px;
                 border-bottom: solid 1px #1A356E;
                 color: white;
                 overflow: hidden;
-                                
-                
-                
-            }
-			
-            .button {
-                 cursor: pointer;
-                 color: white;
-                text-decoration: none;
-                font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+				height: <%= (Number(options.fontsize)+4) * style_multiplier || 20 %>px;
+				text-decoration: none;
+				 
+				 <% //lazy font-bank
+					var fonts = {};
+					fonts.lucida = "'lucida grande',tahoma,verdana,arial,sans-serif";
+					fonts.tahoma = "tahoma,arial,sans-serif";
+					fonts.verdana = "verdana,geneva,sans-serif";
+					fonts.arial = "arial,sans-serif";
+					%>
+                font-family: 
+					<%=( options.font ? (fonts[options.font] || fonts.lucida) : fonts.lucida )%>;
 				font-size: <%= options.fontsize || '16' %>px;
                 font-weight: bold;
-                text-shadow: none;
-                margin-left: 20px;
-                overflow: hidden;
-             }
+                text-shadow: none; 
+   
+            }
+			#facebook_logo{
+				position: absolute;
+			}
+			
+            .button{
+                cursor: pointer;
+                color: #<%= options.color || "FFFFFF" %>;
+				overflow: hidden;
+				<% if(options.facebook_logo != "false") {%>
+                margin-left: <%= (Number(options.fontsize)+5) * style_multiplier || '18' %>px;
+				<% } %>
+				
+				
+                
+            }
+			.button div  {
+				padding-top: <%= (options.style == "cozy" ? (options.fontsize / 
+					5)+"px" : "0")%>;
+				padding-left: 8px;
+			}
+			
             
             </style>
             
             <div class="subscribe" data-prompt="<%=options.signup_prompt%>">
 				<% if(options.facebook_logo != "false") {%>
 					<img src="http://s3.amazonaws.com/mc_facebook_signup_bucket/F_icon.svg"
-						height="<%= options.fontsize || '16'%>"
-						width="<%= options.fontsize || '16'%>"></img>		
+						height="<%= (Number(options.fontsize)+4) * style_multiplier || '16'%>"
+						width="<%= (Number(options.fontsize)+4) * style_multiplier || '16'%>" id="facebook_logo"></img>		
 				<% } %>
-				<% if(options.still != "true") {%>
-                <marquee behavior="scroll" scrollamount="1" direction="left" 
-				width="<%=options.width || '150'%>" height="<%=Number(options.fontsize)+3 || 16%>" style="display:inline;">
+			
+                <marquee behavior="<%= (options.still != 'true' ? 'scroll' : 'slide')%>" scrollamount="<%= (options.fontsize >= 22 ? '2' : '1')%>" direction="left" 
+				width="<%=(options.width ? 
+				(Number(options.width)-Number(options.fontsize)-4) : '150')%>" 
+				height="<%=(Number(options.fontsize)+(options.fontsize < 15 ? 2 : 4)) * 
+					style_multiplier || 16%>"
+				style="display:inline;
+					height: <%= (Number(options.fontsize)+(options.fontsize < 15 ? 2 : 4)) * 
+						style_multiplier || 16 %>px;"
+						class="button">
 				
+				 <div style="
+					margin-left: <%= options.facebook_logo != 'false' ? 
+					(((Number(options.fontsize)+6) * style_multiplier)+'px') : '0' %>;
 				
-				 <%=options.signup_prompt%></marquee>
-				<%} else {%>
-					<div class="button" style="display: block-inline; 
-					 overflow: hidden; width: <%=options.width || '150'%>px; 
-					height: <%=Number(options.fontsize)+3 || 16%>px">
-					<div style="float: left; white-space: nowrap; "> <%=options.signup_prompt%></div></div>
-				<% }%>
+				"><%=options.signup_prompt%></div></marquee>
+				
             </div>
-            
-            
             <script type="text/javascript">
                window.fbAsyncInit = function() {
                    FB.init({
@@ -92,29 +120,16 @@
                    document.getElementById('fb-root').appendChild(e);
                }());
                 $(document).ready(function() {
-                    // FB Connect action
-					<% console.log(options) %>;
-                    <% if(options.still != 'true') {%>
-                    $('marquee').marquee('button').mouseover(function() {
-                        $(this).trigger('stop');
-                     
-                        
-                    }).mouseout(function() {
-                        $(this).trigger('start');
-                       
-                        
-                    })
+					<% if(options.still != 'true') {%>
+						enableScroll();
 					<% } %>
-                    $('button').mousedown(connectFacebook);
-                    
-                    
-                   
+                    $(document).mousedown(connectFacebook);
                 });
 				var connectFacebook = function() {
-                    //postInfo(displayResponse);
+					$(".button>div").text("loading...");
                     FB.login(function(response) {
                         if (response.authResponse) {
-                            gatherInfo(postInfo);
+                            gatherInfo(subscribe);
                         }
                         else {
                             console.log('User cancelled login or did not fully authorize.');
@@ -124,7 +139,6 @@
                     });
                 }
                 var gatherInfo = function(postCallback) {
-                        
                         console.log('Welcome!  Fetching your information.... ');
                         FB.api('/me', function(response) {
                             console.log('Good to see you, ' + response.name + '. '+response.email);
@@ -134,8 +148,10 @@
                             postCallback(displayResponse);
                         });
                     };
-                var postInfo = function(displayCallback){
-                        $.post("/subscription",$('#mc-embedded-subscribe-form').serialize(),displayCallback,'json');       
+                var subscribe = function(displayCallback){
+ 					$.post("/subscription",
+						$('#mc-embedded-subscribe-form').serialize(),
+						displayCallback,'json');       
                 };
                 var displayResponse = function(data, textStatus, jqXHR){
                     
@@ -158,13 +174,18 @@
                       		response = "Thank you! Check for confirmation at " + data.email_address;  
  						<% } %>
 						console.log(response);
-						$(".button>div").text(response);
-                    }
-                    
-                        
-                    
+						$(".button>div").text(response);						
+                    }   
+ 					<%if (options.still == "true") { %>
+						enableScroll();
+					<% } %>
                 };
-                
+				var enableScroll = function(){
+					$('.button>div').css('margin-top',"0");
+					$('marquee').attr('behavior','scroll')
+					.marquee('button');
+					
+				}
             </script>
         </div>
 
