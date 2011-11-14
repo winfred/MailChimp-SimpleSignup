@@ -2,20 +2,17 @@ var oauth = require('../../config/oauth'),
     User = require('../models/user'),
     List = require('../models/list');
 module.exports.login = function(req, res) {
-    if (typeof req.session.user != 'undefined') {
-        res.redirect('/dashboard');
+    if (not_logged_in(req)) {
+		res.render('welcome/login', {
+            login_url: loginUrl()
+        });
     }
     else {
-        res.render('welcome/login', {
-            login_url: oauth.getAuthorizeUrl({
-                response_type: "code",
-                redirect_uri: server.basepath + "/connect"
-            })
-        });
+        res.redirect('/dashboard');
     }
 };
 module.exports.dashboard = function(req, res) {
-    if (typeof req.session.user == 'undefined') {
+    if (not_logged_in(req)) {
         res.redirect('/');
     }
     else {
@@ -35,7 +32,13 @@ module.exports.dashboard = function(req, res) {
 
 };
 module.exports.faq = function(req,res){
-    res.render('welcome/faq');
+	var login_url;
+	if (not_logged_in(req)) {
+        var login_url = loginUrl();
+	}
+    res.render('welcome/faq',{
+		login_url: login_url
+	});
     
 };
 module.exports.logout = function(req,res){
@@ -43,3 +46,13 @@ module.exports.logout = function(req,res){
     res.redirect('/');
     
 };
+//helpers and sugar
+var loginUrl = function(){
+	return oauth.getAuthorizeUrl({
+        response_type: "code",
+        redirect_uri: server.basepath + "/connect"
+    });
+}
+var not_logged_in = function(req){
+	return (typeof req.session.user == 'undefined');
+}

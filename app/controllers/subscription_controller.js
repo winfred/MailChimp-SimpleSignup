@@ -6,7 +6,7 @@ module.exports.create = function(req, response) {
         user_id: req.body.u,
         email_address: req.body.email_address,
         merge_values: req.body.merge_values,
-		opt_in: req.body.opt_in || 'double'
+		opt_in: req.body.opt_in
     });
     subscription.create(function(result) {
         var body = JSON.stringify({
