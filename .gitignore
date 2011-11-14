@@ -1,6 +1,4 @@
 node_modules
 .idea
-config/database.js
-config/oauth.js
 test/models/factory/user.factory.js
 test/models/factory/list.factory.js

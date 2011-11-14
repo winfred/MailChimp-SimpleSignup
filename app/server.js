@@ -25,10 +25,17 @@ server.configure('development', function(){
   server.facebook_appid = "249249625110424";
   
 });
-
+server.configure('staging', function(){
+  server.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+  process.env.type = 'staging';
+  server.basepath = "http://mailchimp-simplesignup-staging.herokuapp.com";
+  server.facebook_basepath = server.basepath;
+  server.facebook_appid = "247615681960473";
+  
+});
 server.configure('production', function(){
   server.use(express.errorHandler()); 
-  server.basepath = "http://mailchimp-simplesignup.herokuapp.com";
+  server.basepath = "http://mailchimp-simplesignup.com";
   server.facebook_basepath = server.basepath;
   server.facebook_appid = "165282016887983";
 });
