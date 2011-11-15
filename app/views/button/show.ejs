@@ -22,11 +22,11 @@
                 </form>
             </div>
             <style>
-			<% var style_multiplier = (options.style == 'cozy' ? 1.5 : 1); %>
+			<% var style_multiplier = (options.style == 'cozy' ? 1.5 : 1); 
+				options.fontsize = options.fontsize || 16;
+			%>
             
-            html{
-				min-height:  <%= Number(options.fontsize) * style_multiplier || 20 %>;
-			}
+            
             .subscribe
             {
                 background: #<%= options.bg_color || "5F78AB"%>;
@@ -34,7 +34,7 @@
                 border-bottom: solid 1px #1A356E;
                 color: white;
                 overflow: hidden;
-				height: <%= (Number(options.fontsize)+4) * style_multiplier || 20 %>px;
+				height: <%= (Number(options.fontsize)+4) * style_multiplier %>px;
 				text-decoration: none;
 				 
 				 <% //lazy font-bank
@@ -46,7 +46,7 @@
 					%>
                 font-family: 
 					<%=( options.font ? (fonts[options.font] || fonts.lucida) : fonts.lucida )%>;
-				font-size: <%= options.fontsize || '16' %>px;
+				font-size: <%= options.fontsize  %>px;
                 font-weight: bold;
                 text-shadow: none; 
    
@@ -60,18 +60,19 @@
                 color: #<%= options.color || "FFFFFF" %>;
 				overflow: hidden;
 				<% if(options.facebook_logo != "false") {%>
-                margin-left: <%= (Number(options.fontsize)+5) * style_multiplier || '18' %>px;
+                margin-left: <%= (Number(options.fontsize)+5) * style_multiplier  %>px;
 				<% } %>
 				
 				
                 
             }
+			
 			.centered  {
 				<% if (options.style =="cozy"){ %>
-				vertical-align: middle;
+				vertical-align: <%= (options.fontsize > 26 ? 'top' : 'middle') %>;
 				padding-top: <%= (options.fontsize / 5)+'px' %>;	
 				<% } %>
-				padding-left: 8px;
+				padding-left: 4px;
 				//
 
 			}
@@ -83,24 +84,27 @@
             <div class="subscribe" data-prompt="<%=options.signup_prompt%>">
 				<% if(options.facebook_logo != "false") {%>
 					<img src="http://s3.amazonaws.com/mc_facebook_signup_bucket/F_icon.svg"
-						height="<%= (Number(options.fontsize)+4) * style_multiplier || '16'%>"
-						width="<%= (Number(options.fontsize)+4) * style_multiplier || '16'%>" id="facebook_logo"></img>		
+						height="<%= (Number(options.fontsize)+4) * style_multiplier %>"
+						width="<%= (Number(options.fontsize)+4) * style_multiplier%>" id="facebook_logo"></img>		
 				<% } %>
 			
-                <marquee behavior="<%= (options.still != 'true' ? 'scroll' : 'slide')%>" scrollamount="<%= (options.fontsize >= 22 ? '2' : '1')%>" direction="left" 
+                <marquee behavior="<%= (options.still != 'true' ? 'scroll' : 'slide')%>" scrollamount="<%= (options.fontsize  >= 22 ? '2' : '1')%>" direction="left" 
 				width="<%=(options.width ? 
 				(Number(options.width)-Number(options.fontsize)-4) : '150')%>" 
-				height="<%=(Number(options.fontsize)+(options.fontsize < 15 ? 2 : 4)) * 
-					style_multiplier || 16%>"
+				height="<%=Number(options.fontsize) * 
+					style_multiplier %>"
 				style="display:inline;
-					height: <%= (Number(options.fontsize)+(options.fontsize < 15 ? 2 : 4)) * 
-						style_multiplier || 16 %>px;"
+					height: <%= (Number(options.fontsize) * style_multiplier)%>px;"
 						class="button">
-				 
+				 <% if (options.still == 'true') {%>
 				 <div style="margin-left: <%= options.facebook_logo != 'false' ? 
 						(((Number(options.fontsize)+6) * style_multiplier)+'px') : '0' %>;
 						
-				"><span class="centered"><%=options.signup_prompt%></span></div></marquee>
+				"><% }%><span class="centered"><%=options.signup_prompt%></span>
+				<% if (options.still == 'true') {%>
+				</div>
+				<% }%>
+				</marquee>
 				
             </div>
             <script type="text/javascript">
@@ -128,6 +132,9 @@
 						enableScroll();
 					<% } %>
                     $(document).mousedown(connectFacebook);
+					<% if (options.style == 'cozy') {%>
+						cozyPadding();
+						<%  }%>
                 });
 				var connectFacebook = function() {
 					
@@ -159,8 +166,6 @@
 						displayCallback,'json');       
                 };
                 var displayResponse = function(data, textStatus, jqXHR){
-                    
-                   
                     if (data.result.error){
                         //TODO: FULL ERROR HANDLING
                         if(data.result.code == 214){
@@ -180,15 +185,26 @@
  						<% } %>
 						console.log(response);
 						$(".centered").text(response);						
-                    }   
- 					<%if (options.still == "true") { %>
-						enableScroll();
+                    }
+					<% if (options.style == 'cozy' ) {%>   
+						cozyPadding();
 					<% } %>
+					enableScroll();
+					
                 };
 				var enableScroll = function(){
+					
 					$('marquee').attr('behavior','scroll')
 					.marquee('button');
 					
+				}
+				//because I don't know CSS well enough 
+				//or jquery.marquee has limited me since height attributes don't apply to <marquee>
+				var cozyPadding = function(){
+					
+					$($('.button div:first-child')[0]).css('padding-top','<%= 
+						(options.fontsize / (options.fontsize > 24 ? 6 : 4))
+						+'px' %>' );
 				}
             </script>
         </div>
