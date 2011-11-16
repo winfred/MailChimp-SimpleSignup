@@ -260,13 +260,16 @@ $('#button-form').submit(function(e){
 		var style = $('input[name="style"]:checked').val();
 		var respond_below = ($('input[name="response_position"]:checked').val() == 'block');
 		var height = (Number(fontsize)+ 8) * (style == "cozy" ? 1.5 : 1);
-		height = (respond_below ? (height*2 < 50 ? 50 : height*2)  : height)
+		height = (respond_below ? (height*2 < 50 ? 50 : height*2+20)  : height)
 		
 		$('#preview-iframe').attr('height',height );
-		var html = $("#preview-iframe")[0].outerHTML;
+		var html = outerHTML($("#preview-iframe")[0]);
 		$('#code-modal pre').text(html);
 		return false;
 
 });
+var outerHTML = function(node){
+	return node.outerHTML || new XMLSerializer().serializeToString(node)
+}
 
 </script>
