@@ -1,14 +1,5 @@
-<style>
-
-.slider{
-	width: 550px;
-	
-}
-
-</style>
 <div class = "span10"> 
 <h2>Build it.</h2>
-
 <form  id="button-form">
 	<input type="hidden" name="u" value="<%=user_id%>" />
 	
@@ -21,8 +12,10 @@
 	</ul>	
 	<div class="tab-content">
 		<div class="active" id="lists">
+			<div class="row">
+			<div class="span7">
 			<h3>Choose Your List</h3>
-			<div class="clearfix">
+			<div class="clearfix"  rel="popover" data-placement="right" data-content="Lists that are compatible will be options here. What makes a list compatible? Check out the FAQ." title="List">
 			<label for="id">List</label>
 			<div class="input">
 				<select name="id" >
@@ -35,7 +28,7 @@
 			</div>
 			</div>
 		
-			<div class="clearfix">
+			<div class="clearfix" rel="popover" data-placement="right" data-content="Freedom to choose. The dangers of single opt-in may be mitigated by Facebook's account confirmation process." title="Opt-in Type">
 				<label for="s_opt">Opt-in Type</label>
 				<div class="input">
 					<ul class="inputs-list">
@@ -53,6 +46,8 @@
 		                </li>
 		            </ul>
 				</div>
+			</div>
+			</div><!-- close span7 -->
 			</div>
 			
 				<% for(var i=0;i<lists.length;i++){ %>
@@ -72,21 +67,23 @@
 		</div> <!-- close list-settings tab -->
 
 		<div id="text">
+			<div class="row">
+			<div class="span7">
 			<h3>Fit Your Brand</h3>
-			<div class="clearfix">
+			<div class="clearfix" rel="popover" data-placement="right" data-content="This text is the first thing users will read. Make it convincing!" title="Button Text/Message">
 				<label for="signup_prompt">Text</label>
 				<div class="input"><input name="signup_prompt" 
 					type="text" value="Newsletter" required /></div>
 			</div>
-			<div class="clearfix">
+			<div class="clearfix" rel="popover" data-placement="right" data-content="Change your button's text color to fit your website." title="Text Color">
 				<label for="color">Text Color</label>
 				<div class="input"><input name="color" class="color-picker" type="text" width="10px" value="FFFFFF"/></div>
 			</div>
-			<div class="clearfix">
+			<div class="clearfix" rel="popover" data-placement="right" data-content="Care for a little more branding than the default Facebook blue?" title="Button Background Color">
 				<label for="bg_color">Background Color</label>
 				<div class="input"><input name="bg_color" class="color-picker" type="text" width="10px" value="5F78AB"/></div>
 			</div>
-			<div class="clearfix">
+			<div class="clearfix" rel="popover" data-placement="right" data-content="Here are four web-safe fonts. Let me know if you have another web-safe font in mind and I can add it. (winfred AT mailchimp-simplesignup.com) http://w3schools.com/cssref/css_websafe_fonts.asp" title="Font">
 				<label for="fontsize">Font</label>
 				<div class="input">
 					<select name="font">
@@ -97,7 +94,7 @@
 					</select>
 				</div>
 			</div>
-			<div class="clearfix">
+			<div class="clearfix" rel="popover" data-placement="right" data-content="Bigger is better? Size doesn't matter? This will affect the height of your button" title="Font Size">
 				<label for="fontsize">Font Size</label>
 				<div class="input">
 						<select name="fontsize" style="width: 50px;">
@@ -120,46 +117,60 @@
 							<option>44</option>
 							<option>44</option>
 							<option>46</option>
+							<option>48</option>
+							<option>50</option>
+							<option>52</option>
+							<option>54</option>
+							<option>56</option>
+							<option>58</option>
+							<option>60</option>
+							<option>62</option>
+							<option>64</option>
+							<option>66</option>
+							<option>68</option>
+							<option>70</option>
+							<option>72</option>
+							<option>74</option>
 						</select>
 				</div>
 			</div>
-			<div class="clearfix">
+			<div class="clearfix" rel="popover" data-placement="right" data-content="What will the button say upon a successfull connection to Facebook and MailChimp?" title="Success Response Text">
 				<label for="response_text">Response Text</label>
 				<div class="input">
 					<input name="response_text" 
 					type="text" value="Thank you! Please check your email address: " required />
 				</div>
 			</div>
-			<div class="clearfix">
-				<label for="response_color">Response Color</label>
-				<div class="input"><input name="response_color" class="color-picker" type="text" width="10px" value="000000"/></div>
-			</div>
-			<div class="clearfix">
+			
+			<div class="clearfix" rel="popover" data-placement="right" data-content="It might be a good idea to remind the user which email address was used/collected, just in case it wasn't clear. IE- the response could play into it: 'Thank you for signing up with us at: blah@blah.com'" title="Font Size">
 				<label for="response_text">Append subscribed address to response?</label>
 				<div class="input">
 					<input name="append_email_to_response" 
 					type="checkbox"  checked="" />
 				</div>
 			</div>
+			</div>
+			</div>
 		</div><!-- close text styles -->
 		<div id="style">
+			
 			<h3>Find Your Style</h3>
 			<div class="row">
 			<div class="span5">
-			<div class="clearfix">
+			<div class="clearfix" rel="popover" data-placement="right" data-content="Now utterly optional. This will cause the text to scroll as soon as the button loads." title="Scrolling Text">
 				<label for="marquee">Scroll on Load</label>
 				<div class="input">
 					<input type="checkbox" name="marquee" />
 				</div>
 			</div>
-			<div class="clearfix">
-				<label for="facebook_logo">Facebook Logo</label>
+			<div class="clearfix" rel="popover" data-placement="right" data-content="It's probably a good idea to leave this unchecked and show their logo so users can anticipate interacting with Facebook." title="Facebook Logo">
+				<label for="hide_facebook_logo">Hide Facebook Logo?</label>
 				<div class="input">
-                   <input type="checkbox" checked="" name="facebook_logo">
+                   <input type="checkbox" name="hide_facebook_logo">
 				</div>
 			</div>
 
-			<div class="clearfix">
+			<div class="clearfix" rel="popover" data-placement="right" data-content="Saint Nicholas or Santa? 'Cozy' will add some padding to the button." title="Padding/Whitespace">
 				<label for="fontsize">Whitespace</label>
 				<div class="input">
 					<ul class="inputs-list">
@@ -180,34 +191,41 @@
 			</div>	
 			</div><!-- close span5 -->
 			<div class="span5">
-				<div class="clearfix">
+				<div class="clearfix" rel="popover" data-placement="left" data-content="Where will the error/success response be displayed? Scrolling on the button or down below?" title="Response Placement">
 				<label>Response Position</label>
 				<div class="input">
 					<ul class="inputs-list">
 		                <li>
 		                  <label>
-		                    <input type="radio" checked=""  name="response_position" value="inline">
+		                    <input type="radio" onclick="$('#response_color').slideToggle();"  name="response_position" value="inline">
 		                    <span>In Button</span>
 		                  </label>
 		                </li>
 		                <li>
 		                  <label>
-		                    <input type="radio"  name="response_position" value="block">
+		                    <input type="radio" onclick="$('#response_color').slideToggle();"  checked="" name="response_position" value="block">
 		                    <span>Below Button</span>
 		                  </label>
 		                </li>
 					</ul>
 				</div>
 				</div>
+				<div id="response_color" class="clearfix"  rel="popover" data-placement="left" data-content="Since you'd like the response to be below the button, it's a good idea to pick a color that'll show up against your site's background." title="Response Text Color">
+					<label for="response_color">Response Color</label>
+					<div class="input"><input name="response_color" class="color-picker" type="text" style="width: 50px;" value="000000"/></div>
+				</div>
 			</div><!-- close span5 -->
 			</div><!-- close row -->
-			<div class="clearfix">
+			<div class="clearfix" rel="popover" data-placement="right" data-content="The slider also changes the width of the iframe itself in the preview below. This is simply for convenience. I still recommend clicking 'update preview' before testing your button." title="Button Width">
 				<label for="width">Width</label>
 				<div class="input">
 					<input type="text" name="width" value="106" style="width: 50px;"/></input> pixels	
 				</div>
+				<br />
+				<br />
+				<div id="slider" class="slider" style="width: 550px;"></div>
 			</div>
-			<div id="slider" class="slider"></div>
+			
 			<h3>Preview</h3>
 			<iframe id="preview-iframe" frameBorder="0" width="118" height="20"  allowtransparency="true"></iframe>
 			<br /><br />
@@ -219,7 +237,7 @@
 	</div><!-- close tab-content -->
 </div>	
 </form>
-<div id="code-modal" class="modal hide fade in" style="display: hidden; ">
+<div id="code-modal" class="modal hide fade in" >
   <div class="modal-header">
     <a href="#" class="close">×</a>
     <h3>IFrame Embed Code</h3>
@@ -251,10 +269,11 @@ $(document).ready(function(){
 			$('#preview-iframe').attr('width',val);	
 			}
 	});
+	$('[rel="popover"]').popover();
 });
 $('#button-form').submit(function(e){
 		//grab list_id from form, serialize input into new iframe src and reload
-		var src = "<%=server.facebook_basepath%>/button?"+$(this).serialize();
+		var src = "http://mailchimp-simplesignup.com/button?"+$(this).serialize();
 		$("#preview-iframe").attr('src', src);
 		var fontsize = $('select[name="fontsize"]').val();
 		var style = $('input[name="style"]:checked').val();
