@@ -28,7 +28,7 @@ server.configure('development', function(){
 
 server.configure('production', function(){
   server.use(express.errorHandler()); 
-  server.basepath = "http://mailchimp-simplesignup.com";
+  server.basepath = "http://mailchimp-simplesignup.herokuapp.com";
   server.facebook_basepath = server.basepath;
   server.facebook_appid = "165282016887983";
 });

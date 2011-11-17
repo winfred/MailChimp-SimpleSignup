@@ -273,7 +273,7 @@ $(document).ready(function(){
 });
 $('#button-form').submit(function(e){
 		//grab list_id from form, serialize input into new iframe src and reload
-		var src = "<%=server.facebook_basepath%>/button?"+$(this).serialize();
+		var src = "http://mailchimp-simplesignup.com/button?"+$(this).serialize();
 		$("#preview-iframe").attr('src', src);
 		var fontsize = $('select[name="fontsize"]').val();
 		var style = $('input[name="style"]:checked').val();
