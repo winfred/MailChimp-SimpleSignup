@@ -4,6 +4,7 @@
     <title>Button - MailChimp SingleSignup</title>
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
+<% if (options.marquee || options.response_position == 'inline')%>
 <script type="text/javascript" src="http://s3.amazonaws.com/mc_facebook_signup_bucket/jquery.scroller.min.js"></script>
 <style type="text/css">
 body {background:none transparent;
@@ -29,8 +30,8 @@ body {background:none transparent;
 				options.fontsize = options.fontsize || 16;
 				
 				//some utility functions
-				var logo_left_margin = options.facebook_logo != 'false' ? 
-						((Number(options.fontsize)+6) * style_multiplier) : '0' ;
+				var logo_left_margin = options.hide_facebook_logo ? 
+						'0' : ((Number(options.fontsize)+6) * style_multiplier)  ;
 				var button_height = (Number(options.fontsize)+4) * style_multiplier;
 				var response_size= .666666 * Number(options.fontsize);
 				response_size = (response_size > 20 ? 20 : response_size);
@@ -83,19 +84,18 @@ body {background:none transparent;
 			
 			
 		/* CSS for the scrollers  - why did I ever build scrolling capability*/
-		<% console.log(options) %>
 			div.scroll_container{
 				<% if(options.marquee) {%>
-					<% if(options.facebook_logo) {%>
-                		margin-left: <%=   logo_left_margin-6  %>px;
+					<% if(options.hide_facebook_logo) {%>
+                		padding-left: 0;
 					<% } else { %>
-						padding-left: 0;
+						margin-left: <%=   logo_left_margin-6  %>px;
 					<% } %>
 				<% } else { %>
-					<% if(options.facebook_logo) {%>
-                		margin-left: <%=   logo_left_margin  %>px;
-					<% } else { %>
+					<% if(options.hide_facebook_logo) {%>
 						padding-left:10px;
+					<% } else { %>
+						margin-left: <%=   logo_left_margin  %>px;
 					<% } %>
 					
 				<% } %>
@@ -120,7 +120,7 @@ body {background:none transparent;
             </style>
             
             <div class="subscribe" data-prompt="<%=options.signup_prompt%>">
-				<% if(options.facebook_logo) {%>
+				<% if(typeof options.hide_facebook_logo == 'undefined') {%>
 					<img src="http://s3.amazonaws.com/mc_facebook_signup_bucket/F_icon.svg"
 						height="<%= button_height %>"
 						width="<%= button_height %>" id="facebook_logo"></img>		
@@ -196,7 +196,7 @@ body {background:none transparent;
                 var handleResponse = function(data, textStatus, jqXHR){
                     if (data.result.error){
                         if(data.result.code == 214){
-						  displayResponse(data,"Already subscribed with "+data.email_address);
+						  displayResponse(data,"Already subscribed with ");
                         }
                         else{
                           displayResponse(data,data.result.error);  
@@ -210,17 +210,18 @@ body {background:none transparent;
 					<% if(options.append_email_to_response) { %>
 						html = html + ' ' + data.email_address
 					<%}%>
-					<% if(options.response_position == 'inline'){ %>
-						$(".scrollingtext").html(html);
-						toggleMarquee();
-					<% } else {%>
+					<% if(options.response_position == 'block'){ %>
 						$('.scrollingtext').html("<%=options.signup_prompt%>")
 						$('.response').html(html);
-						$('.response').slideToggle();	
+						$('.response').slideToggle();
+					<% } else {%>
+						$(".scrollingtext").html(html);
+						toggleMarquee();	
 					<% }%>
 				}
 				var toggleMarquee = function(){
-					$('.horizontal_scroller').SetScroller({	velocity: 	 60,
+					$('.horizontal_scroller').SetScroller({	
+						velocity: 	 <%= (options.fontsize > 28 ? '90' : '60')%> ,
 															direction: 	 'horizontal',
 															startfrom: 	 'right',
 															loop:		 'infinite',
