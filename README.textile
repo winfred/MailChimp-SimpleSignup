@@ -28,7 +28,7 @@ h1. Dev environment setup:
 # set up proper facebook app ids and basepaths in app/server.js (dev/testing/staging/production)
 # $ npm install
 # expresso test/models/*
-# expresso test/controllers/*
+# expresso test/controllers/* 
 
 h4. Some notes about that:
 * follow corresponding *Example.js for 1-3 above
