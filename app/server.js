@@ -39,7 +39,7 @@ server.configure('production', function(){
   server.facebook_basepath = server.basepath;
   server.facebook_appid = "165282016887983";
 });
-
+ 
 //after configuring server per environment, init objects accordingly
 var controller = require('./controller');
 

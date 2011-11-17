@@ -248,7 +248,7 @@
 
   </div>
   <div class="modal-footer">
-    
+    By copying this code and pasting it somewhere you agree that Winfred and MailChimp SimpleSignup are not financially responsible in any way for damages that may result or appear to result from its use. Yes this button will let people subscribe to your list in a few clicks. Do I have to cover myself from the crazies? You betcha. Don't worry, I know you're not crazy. It's that other dude I'm worried about.
   </div>
 </div>
 
@@ -273,7 +273,7 @@ $(document).ready(function(){
 });
 $('#button-form').submit(function(e){
 		//grab list_id from form, serialize input into new iframe src and reload
-		var src = "http://mailchimp-simplesignup.com/button?"+$(this).serialize();
+		var src = "<%= server.facebook_basepath %>/button?"+$(this).serialize();
 		$("#preview-iframe").attr('src', src);
 		var fontsize = $('select[name="fontsize"]').val();
 		var style = $('input[name="style"]:checked').val();
