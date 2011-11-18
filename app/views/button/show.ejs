@@ -4,8 +4,10 @@
     <title>Button - MailChimp SingleSignup</title>
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
-<% if (options.marquee || options.response_position == 'inline')%>
+
+<% if (options.marquee || options.response_position == 'inline') {%>
 <script type="text/javascript" src="http://s3.amazonaws.com/mc_facebook_signup_bucket/jquery.scroller.min.js"></script>
+<% } %>
 <style type="text/css">
 body {background:none transparent;
 }
@@ -121,6 +123,7 @@ body {background:none transparent;
             
             <div class="subscribe" data-prompt="<%=options.signup_prompt%>">
 				<% if(typeof options.hide_facebook_logo == 'undefined') {%>
+
 					<img src="http://s3.amazonaws.com/mc_facebook_signup_bucket/F_icon.svg"
 						height="<%= button_height %>"
 						width="<%= button_height %>" id="facebook_logo"></img>		
@@ -197,6 +200,7 @@ body {background:none transparent;
                     if (data.result.error){
                         if(data.result.code == 214){
 						  displayResponse(data,"Already subscribed with ");
+
                         }
                         else{
                           displayResponse(data,data.result.error);  
@@ -210,6 +214,7 @@ body {background:none transparent;
 					<% if(options.append_email_to_response) { %>
 						html = html + ' ' + data.email_address
 					<%}%>
+
 					<% if(options.response_position == 'block'){ %>
 						$('.scrollingtext').html("<%=options.signup_prompt%>")
 						$('.response').html(html);
@@ -222,6 +227,7 @@ body {background:none transparent;
 				var toggleMarquee = function(){
 					$('.horizontal_scroller').SetScroller({	
 						velocity: 	 <%= (options.fontsize > 28 ? '90' : '60')%> ,
+
 															direction: 	 'horizontal',
 															startfrom: 	 'right',
 															loop:		 'infinite',
