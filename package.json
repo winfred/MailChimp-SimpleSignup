@@ -1,7 +1,7 @@
 {
 
   "name": "mailchimp-simplesignup",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "dependencies": {
     "express": "2.4.0",
     "ejs": "0.4.3",

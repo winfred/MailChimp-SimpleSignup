@@ -17,7 +17,6 @@ h1. Ideas:
 * Other OAuth providers?
 
 h1. TODO:
-* clean up that ugly ugly ugly frontend button code - it works but needs more CSS and less JS
 * make unit tests not collide again... currently must be run one at a time. =(
 
 
