@@ -9,7 +9,7 @@ server.configure(function(){
   server.set('view engine', 'ejs');
   server.use(express.bodyParser());
   server.use(express.cookieParser());
-  server.use(express.session({ secret: "snarglefrockUf&p7q5linB0xfun" }));
+  server.use(express.session({ secret: "janglepop&p7q5linasfasd8uB0xfun" }));
   server.use(express.methodOverride());
   server.use(server.router);
   server.use(express.static(__dirname + '/public'));
@@ -25,14 +25,21 @@ server.configure('development', function(){
   server.facebook_appid = "249249625110424";
   
 });
-
+server.configure('staging', function(){
+  server.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+  process.env.type = 'staging';
+  server.basepath = "http://mailchimp-simplesignup-staging.herokuapp.com";
+  server.facebook_basepath = server.basepath;
+  server.facebook_appid = "247615681960473";
+  
+});
 server.configure('production', function(){
   server.use(express.errorHandler()); 
-  server.basepath = "http://mailchimp-simplesignup.herokuapp.com";
+  server.basepath = "http://mailchimp-simplesignup.com";
   server.facebook_basepath = server.basepath;
   server.facebook_appid = "165282016887983";
 });
-
+ 
 //after configuring server per environment, init objects accordingly
 var controller = require('./controller');
 
@@ -40,7 +47,7 @@ var controller = require('./controller');
 //  GET:    /  - login
 //  GET:    /dashboard    - iframe code generated here once logged in
 //  GET:    /connect     - oauth landing 
-//  GET:    /fb-signup?  - naive <iframe src=
+//  GET:    /fb-signup?  - legacy <iframe src=
 //  GET:    /button     - ajax API <iframe src=
 //  POST:   /subscription     - ajax subscribe($.post)
 

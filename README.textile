@@ -1,35 +1,33 @@
 MailChimp Simple Signup
-Version: ~0.0.2b
+Version: 0.2
 
 
 h1. Features:
 
 * facebook information subscription of MailChimp list
 * grabs email, fname, and lname - for now
-* standard facebook button theme
 * simple error reporting letting the user know which lists are incompatible and why
 ** the list form must not require any other fields than EMAIL/FNAME/LNAME 
-** it also must use the EMAIl/FNAME/LNAME field tag convention 
-*** sorry to the people who like using FIRSTNAME as a merge tag, maybe I'll make it more flexible later
+** it also must use the EMAIl/FNAME/LNAME field tag convention
+* default facebook button theme 
+* button customization - text/font/font-size/padding/opt-in/scrolling/colors/width 
 
 h1. Ideas:
 * other fields to be grabbed from fbook, location(zip)?,website? derp?
 * Other OAuth providers?
-* dashboard button customization code (button-width slider, custom text)
 
 h1. TODO:
-* jquery optimization
 * make unit tests not collide again... currently must be run one at a time. =(
 
 
 h1. Dev environment setup:
-# create couchDBs somewhere (iriscouch.com) and hookup to config/database.js
+# create couchDBs somewhere and hookup to config/database.js
 # register MailChimp dev/pro Oauth applications and hookup to config/oauth.js
 # plug in API keys for each MC account for async testing in test/models/factory/user.js
-# set up proper facebook app ids and basepaths in app/server.js
+# set up proper facebook app ids and basepaths in app/server.js (dev/testing/staging/production)
 # $ npm install
 # expresso test/models/*
-# expresso test/controllers/*
+# expresso test/controllers/* 
 
 h4. Some notes about that:
 * follow corresponding *Example.js for 1-3 above
@@ -42,4 +40,4 @@ h4. Some notes about that:
 ** server.facebook_basepath is used in dev to make the button UI work from views/welcome/dashboard
 
 h1. design notes
-* this is some kind of bastardized MVC/Model2 thing... hopefully it gets the point across
+* this is some kind of MVC/Model2 thing... hopefully it gets the point across

@@ -1,41 +1,295 @@
-
 <div class = "span10"> 
-<h2>Get the button embed code</h2>
+<h2>Build it.</h2>
 
-<dl>
-<% for(var i=0;i<lists.length;i++){ %>
-<% var list = lists[i]; %>
+<form  id="button-form">
+	<input type="hidden" name="u" value="<%=user_id%>" />
+	
+<div id="tabs">
+	<ul class="tabs" data-tabs="tabs">
+	  <li class="active"><a href="#lists">Step One</a></li>
+	  <li><a href="#text">Step Two</a></li>
+	  <li><a href="#style">Step Three</a></li>
+	
+	</ul>	
+	<div class="tab-content">
+		<div class="active" id="lists">
+			<div class="row">
+			<div class="span7">
+			<h3>Choose Your List</h3>
+			<div class="clearfix"  rel="popover" data-placement="right" data-content="Lists that are compatible will be options here. What makes a list compatible? Check out the FAQ." title="List">
 
-    <dt>List: <%=list.name%></dt>
-<dd>
+			<label for="id">List</label>
+			<div class="input">
+				<select name="id" >
+					<% for(var i=0;i<lists.length;i++){ %>
+						<% if (lists[i].bad_merge_vars.length == 0){ %>
+							<option value="<%=lists[i].id%>"><%=lists[i].name%></option>
+						<% } %>
+					<% } %>
+				<select>
+			</div>
+			</div>
+			<div class="clearfix" rel="popover" data-placement="right" data-content="Freedom to choose. The dangers of single opt-in may be mitigated by Facebook's account confirmation process." title="Opt-in Type">
+				<label for="s_opt">Opt-in Type</label>
+				<div class="input">
+					<ul class="inputs-list">
+	                	<li>
+	                  	<label>
+		                    <input type="radio"  name="opt_in" value="single">
+		                    <span>Single</span>
+		                  </label>
+		                </li>
+		                <li>
+		                  <label>
+		                    <input type="radio" checked="" name="opt_in" value="double">
+		                    <span>Double</span>
+		                  </label>
+		                </li>
+		            </ul>
+				</div>
+			</div>
+			</div><!-- close span7 -->
+			</div>
+			
+				<% for(var i=0;i<lists.length;i++){ %>
+					<% if (lists[i].bad_merge_vars.length != 0){ %>
+						<div class="compatibility">
+						<p>Sorry... <strong><%=lists[i].name%></strong> is not compatible with the simple signup button because of the following fields.</p>
+						<ul>
+						<% for (var j=0;j<lists[i].bad_merge_vars.length;j++){ %>
+				    		<%var merge_var = lists[i].bad_merge_vars[j]; %>
+				    		<li>Field "<%=merge_var.name%>" of type "<%=merge_var.field_type%>"  is required and is not supportable with facebook data at this time. </li>
+						<% } %>
+						</ul>
+						</div><!-- close compatibility -->
 
-<% if (list.bad_merge_vars.length == 0){ %>
-    <p>This list will work! =) </p> 
+					<% } %>
+				<%} %>
+		</div> <!-- close list-settings tab -->
 
+		<div id="text">
+			<div class="row">
+			<div class="span7">
+			<h3>Fit Your Brand</h3>
+			<div class="clearfix" rel="popover" data-placement="right" data-content="This text is the first thing users will read. Make it convincing!" title="Button Text/Message">
 
-<br />
+				<label for="signup_prompt">Text</label>
+				<div class="input"><input name="signup_prompt" 
+					type="text" value="Newsletter" required /></div>
+			</div>
+			<div class="clearfix" rel="popover" data-placement="right" data-content="Change your button's text color to fit your website." title="Text Color">
+				<label for="color">Text Color</label>
+				<div class="input"><input name="color" class="color-picker" type="text" width="10px" value="FFFFFF"/></div>
+			</div>
+			<div class="clearfix" rel="popover" data-placement="right" data-content="Care for a little more branding than the default Facebook blue?" title="Button Background Color">
+				<label for="bg_color">Background Color</label>
+				<div class="input"><input name="bg_color" class="color-picker" type="text" width="10px" value="5F78AB"/></div>
+			</div>
+			<div class="clearfix" rel="popover" data-placement="right" data-content="Here are four web-safe fonts. Let me know if you have another web-safe font in mind and I can add it. (winfred AT mailchimp-simplesignup.com) http://w3schools.com/cssref/css_websafe_fonts.asp" title="Font">
+				<label for="fontsize">Font</label>
+				<div class="input">
+					<select name="font">
+						<option value="lucida">Lucida Grande (from Facebook)</option>
+						<option value="tahoma">Tahoma</option>
+						<option value="verdana">Verdana</option>
+						<option value="arial">Arial</option>
+					</select>
+				</div>
+			</div>
+			<div class="clearfix" rel="popover" data-placement="right" data-content="Bigger is better? Size doesn't matter? This will affect the height of your button" title="Font Size">
+				<label for="fontsize">Font Size</label>
+				<div class="input">
+						<select name="fontsize" style="width: 50px;">
+							<option>12</option>
+							<option selected>14</option>
+							<option>16</option>
+							<option>18</option>
+							<option>20</option>
+							<option>22</option>
+							<option>24</option>
+							<option>26</option>
+							<option>28</option>
+							<option>30</option>
+							<option>32</option>
+							<option>34</option>
+							<option>36</option>
+							<option>38</option>
+							<option>40</option>
+							<option>42</option>
+							<option>44</option>
+							<option>44</option>
+							<option>46</option>
+							<option>48</option>
+							<option>50</option>
+							<option>52</option>
+							<option>54</option>
+							<option>56</option>
+							<option>58</option>
+							<option>60</option>
+							<option>62</option>
+							<option>64</option>
+							<option>66</option>
+							<option>68</option>
+							<option>70</option>
+							<option>72</option>
+							<option>74</option>
+						</select>
+				</div>
+			</div>
+			<div class="clearfix" rel="popover" data-placement="right" data-content="What will the button say upon a successfull connection to Facebook and MailChimp?" title="Success Response Text">
+				<label for="response_text">Response Text</label>
+				<div class="input">
+					<input name="response_text" 
+					type="text" value="Thank you! Please check your email address: " required />
+				</div>
+			</div>
+			<div class="clearfix" rel="popover" data-placement="right" data-content="It might be a good idea to remind the user which email address was used/collected, just in case it wasn't clear. IE- the response could play into it: 'Thank you for signing up with us at: blah@blah.com'" title="Font Size">
+				<label for="response_text">Append subscribed address to response?</label>
+				<div class="input">
+					<input name="append_email_to_response" 
+					type="checkbox"  checked="" />
+				</div>
+			</div>
+			</div>
+			</div>
+		</div><!-- close text styles -->
+		<div id="style">
+			
+			<h3>Find Your Style</h3>
+			<div class="row">
+			<div class="span5">
+			<div class="clearfix" rel="popover" data-placement="right" data-content="Now utterly optional. This will cause the text to scroll as soon as the button loads." title="Scrolling Text">
 
-    <iframe src="<%=server.facebook_basepath%>/button?signup_prompt=Newsletter%20Signup%20through%20Facebook&u=<%=user_id%>&id=<%=list.id%>" width="170" height="23" frameBorder="0"></iframe>
-    <br />
-    
-    <pre><%=escape("<iframe src='"+server.facebook_basepath+"/button?signup_prompt=Newsletter%20Signup%20through%20Facebook&u="+user_id+"&id="+list.id+"' width='170' height='23' frameBorder='0'></iframe>")%></pre>
-    
-<hr />
-<% }else{ %>
-<div class="compatibility">
-<p> This list is not compatible with the simple signup button because of the following fields.</p>
-<ul>
-<% for (var j=0;j<list.bad_merge_vars.length;j++){ %>
-    <%var bad_merge_var = list.bad_merge_vars[j]; %>
-    <li>Field "<%=bad_merge_var.name%>" of type "<%=bad_merge_var.field_type%>"  is required and is not supportable with facebook data at this time. </li>
-<% } %>
-</ul>
+				<label for="marquee">Scroll on Load</label>
+				<div class="input">
+					<input type="checkbox" name="marquee" />
+				</div>
+			</div>
+			<div class="clearfix" rel="popover" data-placement="right" data-content="It's probably a good idea to leave this unchecked and show their logo so users can anticipate interacting with Facebook." title="Facebook Logo">
+				<label for="hide_facebook_logo">Hide Facebook Logo?</label>
+				<div class="input">
+                   <input type="checkbox" name="hide_facebook_logo">
+				</div>
+			</div>
+
+			<div class="clearfix" rel="popover" data-placement="right" data-content="Saint Nicholas or Santa? 'Cozy' will add some padding to the button." title="Padding/Whitespace">
+				<label for="fontsize">Whitespace</label>
+				<div class="input">
+					<ul class="inputs-list">
+		                <li>
+		                  <label>
+		                    <input type="radio" checked=""  name="style" value="sleek">
+		                    <span>Sleek</span>
+		                  </label>
+		                </li>
+		                <li>
+		                  <label>
+		                    <input type="radio"  name="style" value="cozy">
+		                    <span>Cozy</span>
+		                  </label>
+		                </li>
+					</ul>
+				</div>
+			</div>	
+			</div><!-- close span5 -->
+			<div class="span5">
+				<div class="clearfix" rel="popover" data-placement="left" data-content="Where will the error/success response be displayed? Scrolling on the button or down below?" title="Response Placement">
+				<label>Response Position</label>
+				<div class="input">
+					<ul class="inputs-list">
+		                <li>
+		                  <label>
+		                    <input type="radio" onclick="$('#response_color').slideToggle();"  name="response_position" value="inline">
+		                    <span>In Button</span>
+		                  </label>
+		                </li>
+		                <li>
+		                  <label>
+		                    <input type="radio" onclick="$('#response_color').slideToggle();"  checked="" name="response_position" value="block">
+		                    <span>Below Button</span>
+		                  </label>
+		                </li>
+					</ul>
+				</div>
+				</div>
+				<div id="response_color" class="clearfix"  rel="popover" data-placement="left" data-content="Since you'd like the response to be below the button, it's a good idea to pick a color that'll show up against your site's background." title="Response Text Color">
+					<label for="response_color">Response Color</label>
+					<div class="input"><input name="response_color" class="color-picker" type="text" style="width: 50px;" value="000000"/></div>
+				</div>
+			</div><!-- close span5 -->
+			</div><!-- close row -->
+			<div class="clearfix" rel="popover" data-placement="right" data-content="The slider also changes the width of the iframe itself in the preview below. This is simply for convenience. I still recommend clicking 'update preview' before testing your button." title="Button Width">
+				<label for="width">Width</label>
+				<div class="input">
+					<input type="text" name="width" value="106" style="width: 50px;"/></input> pixels	
+				</div>
+				<br />
+				<br />
+				<div id="slider" class="slider" style="width: 550px;"></div>
+			</div>
+			<h3>Preview</h3>
+			<iframe id="preview-iframe" frameBorder="0" width="118" height="20"  allowtransparency="true"></iframe>
+			<br /><br />
+			<div>
+			<input type="submit" class="btn" data-controls-modal="code-modal" data-backdrop="static" style="float:right;" value="Get Code"></input>
+			<input type="submit" class="btn danger" style="float:right; display: inline;" value="Update Preview"></input>	
+			</div>
+		</div><!-- close look and feel-->
+	</div><!-- close tab-content -->
+</div>	
+</form>
+<div id="code-modal" class="modal hide fade in" >
+  <div class="modal-header">
+    <a href="#" class="close">×</a>
+    <h3>IFrame Embed Code</h3>
+  </div>
+  <div class="modal-body">
+    <p>Here ya go!</p>
+	<pre>This is where the code will go.</pre>
+
+  </div>
+  <div class="modal-footer">
+    By copying this code and pasting it somewhere you agree that Winfred and MailChimp SimpleSignup are not financially responsible in any way for damages that may result or appear to result from its use. Yes this button will let people subscribe to your list in a few clicks. Do I have to cover myself from the crazies? You betcha. Don't worry, I know you're not crazy. It's that other dude I'm worried about.
+  </div>
 </div>
 
-<% } %>
-</dd>
-<%} %>
-</dl>
-</div>
- 
+</div><!-- close span10 -->
 
+<script>
+$(document).ready(function(){
+	$('#button-form').submit();
+	$('.color-picker').wheelColorPicker({format: 'hex', dir: "http://s3.amazonaws.com/mc_facebook_signup_bucket/jquery.colorpicker"});
+	$('.slider').slider({
+		animate: false,
+		max: 1000,
+		min: 50,
+		value: 106,
+		slide: function(event, ui) {	
+			var val = ui.value;
+			$('input[name="width"]').val(val);
+			$('#preview-iframe').attr('width',val);	
+			}
+	});
+	$('[rel="popover"]').popover();
+});
+$('#button-form').submit(function(e){
+		//grab list_id from form, serialize input into new iframe src and reload
+		var src = "<%= server.facebook_basepath %>/button?"+$(this).serialize();
+		$("#preview-iframe").attr('src', src);
+		var fontsize = $('select[name="fontsize"]').val();
+		var style = $('input[name="style"]:checked').val();
+		var respond_below = ($('input[name="response_position"]:checked').val() == 'block');
+		var height = (Number(fontsize)+ 8) * (style == "cozy" ? 1.5 : 1);
+		height = (respond_below ? (height*2 < 50 ? 50 : height*2+20)  : height)
+		
+		$('#preview-iframe').attr('height',height );
+		var html = outerHTML($("#preview-iframe")[0]);
+		$('#code-modal pre').text(html);
+		return false;
+
+});
+var outerHTML = function(node){
+	return node.outerHTML || new XMLSerializer().serializeToString(node);
+}
+
+</script>

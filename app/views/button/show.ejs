@@ -3,16 +3,24 @@
 <head>
     <title>Button - MailChimp SingleSignup</title>
 
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
-<script type="text/javascript" src="http://s3.amazonaws.com/mc_facebook_signup_bucket/jquery.marquee.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
+
+<% if (options.marquee || options.response_position == 'inline') {%>
+<script type="text/javascript" src="http://s3.amazonaws.com/mc_facebook_signup_bucket/jquery.scroller.min.js"></script>
+<% } %>
+<style type="text/css">
+body {background:none transparent;
+}
+</style>
 </head>
 <body style="margin: 0 0 0 0; padding: 0 0 0 0;">
-        <div id="mc-fb-signup" class="subscribe">
+        
             <div id="fb-root"></div>
             <div id="mc_embed_signup" style="display: none" >
                 <form action="/subscription" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank">
-                    <input type="hidden" name="u" value="<%=user_id%>" /> 
-                    <input type="hidden" name="id" value="<%=list_id%>" /> 
+                    <input type="hidden" name="u" value="<%=options.u%>" /> 
+                    <input type="hidden" name="id" value="<%=options.id%>" /> 
+					<input type="hidden" name="opt_in" value="<%= options.opt_in %>">
                     <input type="text" value="" name="email_address"  id="mc-EMAIL"  />
                     <input type="text" name="merge_values[FNAME]" id="mc-FNAME" size="25" value="" /> 
                     <input type="text" name="merge_values[LNAME]" id="mc-LNAME" size="25" value="" /> 
@@ -20,37 +28,117 @@
                 </form>
             </div>
             <style>
+			<% var style_multiplier = (options.style == 'cozy' ? 1.5 : 1); 
+				options.fontsize = options.fontsize || 16;
+				
+				//some utility functions
+				var logo_left_margin = options.hide_facebook_logo ? 
+						'0' : ((Number(options.fontsize)+6) * style_multiplier)  ;
+				var button_height = (Number(options.fontsize)+4) * style_multiplier;
+				var response_size= .666666 * Number(options.fontsize);
+				response_size = (response_size > 20 ? 20 : response_size);
+				
+				var response_text;
+				//some backwards compatibility
+				if (options.opt_in != 'single') {
+					response_text = options.response_text || "Thank you! Please check for confirmation email.";
+				}else{
+					response_text = options.response_text || "Thank you for subscribing!";
+				}
+			%>
             
             
             .subscribe
             {
-                background: #5F78AB url(http://s3.amazonaws.com/mc_facebook_signup_bucket/facebook_icon.png) no-repeat;
+                background: #<%= options.bg_color || "5F78AB"%>;
                 border-radius: 4px;
                 border-bottom: solid 1px #1A356E;
-                color: white;
+           
                 overflow: hidden;
-                                
-                
-                
-            }
-            .button {
-                 cursor: pointer;
-                 color: white;
-                text-decoration: none;
-                font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+				text-decoration: none;
+				 cursor: pointer;
+                color: #<%= options.color || "FFFFFF" %>;
+				
+				 <% //lazy font-bank
+					var fonts = {};
+					fonts.lucida = "'lucida grande',tahoma,verdana,arial,sans-serif";
+					fonts.tahoma = "tahoma,arial,sans-serif";
+					fonts.verdana = "verdana,geneva,sans-serif";
+					fonts.arial = "arial,sans-serif";
+					%>
+                font-family: 
+					<%=( options.font ? (fonts[options.font] || fonts.lucida) : fonts.lucida )%>;
+				font-size: <%= options.fontsize  %>px;
                 font-weight: bold;
-                text-shadow: none;
-                margin-left: 20px;
-                overflow: hidden;
-             }
-            
+                text-shadow: none; 
+   
+            }
+			#facebook_logo{
+				position: absolute;
+				z-index: 400;
+			}
+			.response {
+				color: #<%= options.response_color || '000' %>;
+				text-align: center;
+				font-size: <%= response_size %>px;
+			}
+			
+			
+			
+		/* CSS for the scrollers  - why did I ever build scrolling capability*/
+			div.scroll_container{
+				<% if(options.marquee) {%>
+					<% if(options.hide_facebook_logo) {%>
+                		padding-left: 0;
+					<% } else { %>
+						margin-left: <%=   logo_left_margin-6  %>px;
+					<% } %>
+				<% } else { %>
+					<% if(options.hide_facebook_logo) {%>
+						padding-left:10px;
+					<% } else { %>
+						margin-left: <%=   logo_left_margin  %>px;
+					<% } %>
+					
+				<% } %>
+			}
+			div.horizontal_scroller{
+				position:relative;
+				height: <%=button_height %>px;
+				width:<%= options.width || 150 %>px;
+				display:block;
+				overflow:hidden;
+				
+			}
+			div.scrollingtext{	
+				position:absolute;
+				white-space:nowrap;
+				line-height: <%=button_height%>px;
+				
+			}
+		
+           
             </style>
             
-            <div class="subscribe" data-prompt="<%=signup_prompt%>">
-                <marquee behavior="scroll" scrollamount="1" direction="left" width="170" height="20" > <%=signup_prompt%></marquee>
+            <div class="subscribe" data-prompt="<%=options.signup_prompt%>">
+				<% if(typeof options.hide_facebook_logo == 'undefined') {%>
+
+					<img src="http://s3.amazonaws.com/mc_facebook_signup_bucket/F_icon.svg"
+						height="<%= button_height %>"
+						width="<%= button_height %>" id="facebook_logo"></img>		
+				<% } %>
+				<div class="scroll_container">
+				<div class="horizontal_scroller" id="no_mouse_events">
+					<div class="scrollingtext">
+						<%=options.signup_prompt%>
+					</div>
+				</div>
+               </div>
             </div>
-            
-            
+			<div class="response" style="display: none">
+				<%=response_text%>
+			</div>
+
             <script type="text/javascript">
                window.fbAsyncInit = function() {
                    FB.init({
@@ -72,69 +160,87 @@
                    document.getElementById('fb-root').appendChild(e);
                }());
                 $(document).ready(function() {
-                    // FB Connect action
-                    
-                    $('marquee').marquee('button').mouseover(function() {
-                        $(this).trigger('stop');
-                     
-                        
-                    }).mouseout(function() {
-                        $(this).trigger('start');
-                       
-                        
-                    }).mousedown(function() {
-                        //postInfo(displayResponse);
-                        FB.login(function(response) {
-                            if (response.authResponse) {
-                                gatherInfo(postInfo);
-                            }
-                            else {
-                                console.log('User cancelled login or did not fully authorize.');
-                            }
-                        }, {
-                            scope: 'email'
-                        });
-                    });
-                    
-                    
-                    
-                   
+					<% if (options.marquee) { %>
+						toggleMarquee();
+					<% } %>
+                    $(document).mousedown(connectFacebook);
+					
                 });
+				var connectFacebook = function() {
+					
+					$(".scrollingtext").text("loading...");
+                    FB.login(function(response) {
+                        if (response.authResponse) {
+                            gatherInfo(subscribe);
+                        }
+                        else {
+                            console.log('User cancelled login or did not fully authorize.');
+                        }
+                    }, {
+                        scope: 'email'
+                    });
+                }
                 var gatherInfo = function(postCallback) {
-                        
                         console.log('Welcome!  Fetching your information.... ');
                         FB.api('/me', function(response) {
                             console.log('Good to see you, ' + response.name + '. '+response.email);
                             $("#mc-EMAIL").val(response.email);
                             $("#mc-FNAME").val(response.first_name);
                             $("#mc-LNAME").val(response.last_name);
-                            postCallback(displayResponse);
+                            postCallback(handleResponse);
                         });
                     };
-                var postInfo = function(displayCallback){
-                        $.post("/subscription",$('#mc-embedded-subscribe-form').serialize(),displayCallback,'json');       
+                var subscribe = function(handleCallback){
+ 					$.post("/subscription",
+						$('#mc-embedded-subscribe-form').serialize(),
+						handleCallback,'json');       
                 };
-                var displayResponse = function(data, textStatus, jqXHR){
-                    
-                    
+                var handleResponse = function(data, textStatus, jqXHR){
                     if (data.result.error){
-                        //TODO: FULL ERROR HANDLING
                         if(data.result.code == 214){
-                          $(".button>div").text("Already subscribed with "+data.email_address);  
+						  displayResponse(data,"Already subscribed with ");
+
                         }
                         else{
-                          $(".button>div").text(data.result.error);  
+                          displayResponse(data,data.result.error);  
                         }
-                     
-                    }else{
-                      $(".button>div").text("Thank you! Check for confirmation at " + data.email_address);   
+						console.log(data.result);
+                    }else{		
+						displayResponse(data,"<%=response_text%>");										
                     }
-                    
-                        
-                    
                 };
-                
-            </script>
-        </div>
+				var displayResponse = function(data,html){
+					<% if(options.append_email_to_response) { %>
+						html = html + ' ' + data.email_address
+					<%}%>
 
+					<% if(options.response_position == 'block'){ %>
+						$('.scrollingtext').html("<%=options.signup_prompt%>")
+						$('.response').html(html);
+						$('.response').slideToggle();
+					<% } else {%>
+						$(".scrollingtext").html(html);
+						toggleMarquee();	
+					<% }%>
+				}
+				var toggleMarquee = function(){
+					$('.horizontal_scroller').SetScroller({	
+						velocity: 	 <%= (options.fontsize > 28 ? '90' : '60')%> ,
+
+															direction: 	 'horizontal',
+															startfrom: 	 'right',
+															loop:		 'infinite',
+															movetype: 	 'linear',
+															onmouseover: 'play',
+															onmouseout:  'play',
+															onstartup: 	 'play',
+															cursor: 	 'pointer'
+														});
+				}
+				
+			
+				
+            </script>
+        
+</body>
 
