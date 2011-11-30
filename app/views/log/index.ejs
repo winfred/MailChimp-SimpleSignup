@@ -1,0 +1,17 @@
+<h1>Coming Soon - Use Data</h1>
+<table class="zebra-striped">
+	<tr>
+	<th>User</th>
+	<th>Website</th>
+	<th>Clicks</th>
+	<th>Views</th>
+	</tr>
+<% for (var i=0;i<logs.length; i++) { %>
+	<tr>
+		<td><%= logs[i].user%></td>
+		<td><%= logs[i].website %></td>
+		<td><%= logs[i].subscribes %></td>
+		<td><%= logs[i].loads %></td>
+	</tr>
+<% } %>	
+</table>
