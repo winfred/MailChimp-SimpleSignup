@@ -1,7 +1,10 @@
 var express = require('express'),
     urlpaser = require('url');
-       
+	mongoose = require('mongoose');       
 server = module.exports = express.createServer();
+//simple logging
+mongoose.connect('mongodb://localhost/logs');
+require('./models/log');
 
 // Configuration
 server.configure(function(){
@@ -59,6 +62,7 @@ server.get('/connect',controller.oauth.connect);
 server.get('/fb-signup?',controller.naive.show);
 server.get('/button',controller.button.show);
 server.post('/subscription',controller.subscription.create);
+server.get('/logs',controller.log.index);
 
 
 

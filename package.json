@@ -6,6 +6,7 @@
     "express": "2.4.0",
     "ejs": "0.4.3",
     "cradle": "0.5.7",
+	"mongoose": "2.3.13",
     "mailchimp": "0.8.0",
     "expresso": "0.8.1", 
     "oauth": "0.9.5",

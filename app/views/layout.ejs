@@ -85,6 +85,9 @@ a.button{
           <ul class="nav">
             <li><a href="/dashboard#install">Install</a></li>
             <li><a href="/faq">FAQ</a></li>
+			<% if (typeof user_id != 'undefined'  && user_id == "5f96e5e279c0586e9576c5d88") {%>
+			<li><a href="/logs">Logs</a></li>
+			<% }%>
           </ul>
         <% if (typeof login_url != 'undefined') {%>
           <a class="button pull-right" href="<%= login_url %>">Log In through MailChimp</a>
@@ -103,9 +106,9 @@ a.button{
         </div>
 <h2><% if(typeof notice != 'undefined'){notice;}else{""}%></h2>
 <div class = "row"> 
-
+<div class = "span10"> 
 <%- body %>
-
+</div>
     <div class="span4">
             <h3 id="install">Installation Notes</h3> 
             <ol>
