@@ -3,7 +3,8 @@ var url = require('url');
  * Some simple logging with MongoDB/Mongoose
  * Mongoose connection and global set up in server.js
  * I reckon requests shouldn't be passed to models.
- * These request handling methods should be moved into the log_controller
+ * These request handling methods should maybe be moved into the log_controller
+ * and perhaps logevents should be triggered by the browser through another ajax request
  */
 var Schema = mongoose.Schema
   , ObjectId = Schema.ObjectId;
