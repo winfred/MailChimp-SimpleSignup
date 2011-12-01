@@ -1,17 +1,58 @@
-<h1>Coming Soon - Use Data</h1>
-<table class="zebra-striped">
+<script type="text/javascript" src="http://s3.amazonaws.com/mc_facebook_signup_bucket/jquery.tablesorter.js"></script>
+<script type="text/javascript" src="http://s3.amazonaws.com/mc_facebook_signup_bucket/jquery.tablefilter.js"></script>
+
+<h1>User Data</h1>
+<br />
+<form class="filter-form">Filter: <input name="filter" id="filter" value="" maxlength="30" size="30" type="text" /></form>
+<table class="sortable zebra-striped">
+	<thead>
 	<tr>
 	<th>User</th>
+	<th>List</th>
 	<th>Website</th>
 	<th>Clicks</th>
 	<th>Views</th>
 	</tr>
+	</thead>
+	<tbody>
 <% for (var i=0;i<logs.length; i++) { %>
 	<tr>
 		<td><%= logs[i].user%></td>
+		<td><%= logs[i].list%></td>
 		<td><%= logs[i].website %></td>
-		<td><%= logs[i].subscribes %></td>
-		<td><%= logs[i].loads %></td>
+		<td><%= logs[i].clicks %></td>
+		<td><%= logs[i].views %></td>
 	</tr>
 <% } %>	
+	</tbody>
 </table>
+
+<script >
+
+/**
+ *Table sorting and filtering
+ *
+ */
+
+	$(function() { 
+	  	$("table.sortable").tablesorter({
+		sortList: [[0,0]]
+	});
+	
+	  var theTable = $('table.sortable')
+
+	  theTable.find("tbody > tr").find("td:eq(1)").mousedown(function(){
+	    $(this).prev().find(":checkbox").click()
+	  });
+
+	  $("#filter").keyup(function() {
+	    $.uiTableFilter( theTable, this.value );
+	  })
+
+	  $('#filter-form').submit(function(){
+	    theTable.find("tbody > tr:visible > td:eq(1)").mousedown();
+	    return false;
+	  }).focus(); //Give focus to input field
+	});
+
+</script>
