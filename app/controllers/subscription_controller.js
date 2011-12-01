@@ -15,7 +15,7 @@ module.exports.create = function(req, response) {
             result: result,
             email_address: subscription.email_address
         });
-		Logger.registerSubscribe(req,function(){
+		Logger.registerClick(req,function(){
 			response.writeHead(200, {
 	            'Content-Type': 'application/json; charset=utf-8',
 	            'Content-Length': body.length
