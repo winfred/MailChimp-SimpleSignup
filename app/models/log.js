@@ -10,11 +10,11 @@ var Schema = mongoose.Schema
 
 var LogEntrySchema = new Schema({
     _id        : ObjectId
-  , env       : String
   , user	  : String
-  , subscribes: {type: Number, default: 0}
-  , loads 	  : {type: Number, default: 1}
+  , clicks    : {type: Number, default: 0}
+  , views 	  : {type: Number, default: 1}
   , website   : String
+  , list      : String
 });
 /**
  * Static helper methods
@@ -29,19 +29,19 @@ LogEntrySchema.statics.create = function(options,cb) {
 	var logEntry = new LogEntry(log);
 	logEntry.save(cb);
 };
-LogEntrySchema.statics.registerLoad = function(req,cb){
+LogEntrySchema.statics.registerView = function(req,cb){
 	this.findUserWebsiteDoc(req,cb,function(doc){
 		if(doc){
-			doc.incrementLoads(cb);
+			doc.incrementViews(cb);
 		}else{
 			buildProfileDoc(req,cb);
 		}
 	});
 }
-LogEntrySchema.statics.registerSubscribe = function(req,cb){
+LogEntrySchema.statics.registerClick = function(req,cb){
 	this.findUserWebsiteDoc(req,cb,function(doc){
 		if (doc){
-			doc.incrementSubscribes(cb);
+			doc.incrementClicks(cb);
 		}else{
 			console.log("building log profile upon first subscribe... if in a production environment, this profile should have been built upon the button being loaded rather than here. Check the log model for more details.")
 			//this should only ever run in a dev enironment as it compensates for the localhost/127.0.0.1 conundrum
@@ -61,12 +61,12 @@ LogEntrySchema.statics.findUserWebsiteDoc = function(req,orig_cb,cb){
 /**
  * Instance methods
  */
-LogEntrySchema.methods.incrementSubscribes = function (cb) {
-   	this.subscribes++;
+LogEntrySchema.methods.incrementClicks = function (cb) {
+   	this.clicks++;
 	this.save(cb);
 };
-LogEntrySchema.methods.incrementLoads = function(cb) {
-   	this.loads++;
+LogEntrySchema.methods.incrementViews = function(cb) {
+   	this.views++;
 	this.save(cb);
 };
 /**
@@ -76,10 +76,12 @@ function referringHost(req){
 	return url.parse(req.headers.referer).hostname;
 }
 function buildProfileDoc(req,cb){
-	mongoose.model('LogEntry').create({
-		env: process.env.type,
-		user: req.query.u || req.body.u,
-		website: referringHost(req),
-	},cb);
+	if (referringHost(req) != 'mailchimp-simplesignup.com' || referringHost(req) != 'mailchimp-simplesignup.herokuapp.com') {
+		mongoose.model('LogEntry').create({
+			list: req.query.id || req.body.id
+			user: req.query.u || req.body.u,
+			website: referringHost(req),
+		},cb);
+	}
 }
 mongoose.model("LogEntry", LogEntrySchema);
