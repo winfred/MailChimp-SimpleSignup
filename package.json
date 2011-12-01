@@ -1,11 +1,12 @@
 {
 
   "name": "mailchimp-simplesignup",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "dependencies": {
     "express": "2.4.0",
     "ejs": "0.4.3",
     "cradle": "0.5.7",
+	"mongoose": "2.3.13",
     "mailchimp": "0.8.0",
     "expresso": "0.8.1", 
     "oauth": "0.9.5",

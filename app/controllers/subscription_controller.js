@@ -1,4 +1,6 @@
-var Subscription = require('../models/subscription');
+var Subscription = require('../models/subscription'),
+	Logger = mongoose.model('LogEntry');
+
 module.exports.create = function(req, response) {
     req.accepts('application/json');
     var subscription = new Subscription({
@@ -13,10 +15,12 @@ module.exports.create = function(req, response) {
             result: result,
             email_address: subscription.email_address
         });
-        response.writeHead(200, {
-            'Content-Type': 'application/json; charset=utf-8',
-            'Content-Length': body.length
-        });
-        response.end(body);
+		Logger.registerSubscribe(req,function(){
+			response.writeHead(200, {
+	            'Content-Type': 'application/json; charset=utf-8',
+	            'Content-Length': body.length
+	        });
+	        response.end(body);
+		});
     });
 };
