@@ -13,7 +13,7 @@ var List = function(properties) {
     };
 //the fetch isn't actually made in this method, which is unclear... perhaps there's a better name for this process
 //Async calls made here
-List.prototype.fetchMergeVars = function(user,finishCallback,finalCallback) {
+List.prototype.fetchMergeVars = function(user,finalCallback) {
     var list = this;
     if (typeof user.lists == 'undefined') {
         user.fetchLists(callback);
@@ -28,7 +28,7 @@ List.prototype.fetchMergeVars = function(user,finishCallback,finalCallback) {
         list.merge_vars = merge_vars;
         user.temp.calls++;
         //passing user object to avoid circular JSON references
-        finishCallback(user,finalCallback);
+        user.finishFetchListsAsync(finalCallback);
     });
 };
 /**
