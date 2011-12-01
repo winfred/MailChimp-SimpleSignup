@@ -1,6 +1,5 @@
 node_modules
-.idea
-
+.idea6
 
 config/oauth.js
 config/database.js

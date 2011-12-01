@@ -11,6 +11,7 @@ var Schema = mongoose.Schema
 
 var LogEntrySchema = new Schema({
     _id        : ObjectId
+<<<<<<< HEAD
   , user	  : String
   , clicks    : {type: Number, default: 0}
   , views 	  : {type: Number, default: 1}
