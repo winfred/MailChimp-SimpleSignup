@@ -17,7 +17,7 @@ var LogEntrySchema = new Schema({
   , website   : String
 });
 /**
- * Some static helper methods
+ * Static helper methods
  */
 //monkeypatch create method
 LogEntrySchema.statics.create = function(options,cb) {
@@ -59,7 +59,7 @@ LogEntrySchema.statics.findUserWebsiteDoc = function(req,orig_cb,cb){
 	});
 }
 /**
- * Some instance methods
+ * Instance methods
  */
 LogEntrySchema.methods.incrementSubscribes = function (cb) {
    	this.subscribes++;

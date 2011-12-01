@@ -1,5 +1,5 @@
 MailChimp Simple Signup
-Version: 0.2
+Version: 0.2.1
 
 
 h1. Features:
@@ -15,9 +15,12 @@ h1. Features:
 h1. Ideas:
 * other fields to be grabbed from fbook, location(zip)?,website? derp?
 * Other OAuth providers?
+* hosted signup form fallback
 
 h1. TODO:
 * make unit tests not collide again... currently must be run one at a time. =(
+* un-hardcode the admin account flag - will be going with a futon edit process for giving an account admin access to maintain security
+* update readme to include mongodb logging info - probably wont fully switch even though it's a better "tool for the job". The job is pretty easy so either couch or mongo will work for user accounts.
 
 
 h1. Dev environment setup:

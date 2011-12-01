@@ -2,8 +2,8 @@ var express = require('express'),
     urlpaser = require('url');
 	mongoose = require('mongoose');       
 server = module.exports = express.createServer();
-//simple logging
-mongoose.connect('mongodb://localhost/logs');
+//simple logging - make the connection and hook our model to mongoose
+mongoose.connect(process.env.MONGOHQ_URL || 'mongodb://localhost/logs');
 require('./models/log');
 
 // Configuration
