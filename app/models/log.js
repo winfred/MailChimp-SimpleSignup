@@ -78,13 +78,13 @@ function referringHost(req){
 }
 function buildProfileDoc(req,cb){
 	if (referringHost(req) != 'mailchimp-simplesignup.com' || referringHost(req) != 'mailchimp-simplesignup.herokuapp.com') {
-		mongoose.model('LogEntry').create({profile_from(req)},cb);
+		mongoose.model('LogEntry').create(profile_from(req),cb);
 	}
 }
 function profile_from(req){
 	return {user: req.query.u || req.body.u, 
 		website: referringHost(req),
 		list: req.query.id || req.body.id
-		}
+		};
 }
 mongoose.model("LogEntry", LogEntrySchema);
