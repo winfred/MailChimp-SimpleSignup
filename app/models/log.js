@@ -52,6 +52,7 @@ LogEntrySchema.statics.registerSubscribe = function(req,cb){
 }
 LogEntrySchema.statics.findUserWebsiteDoc = function(req,orig_cb,cb){
 	this.findOne({user: req.query.u, website: referringHost(req)},function(err,doc){
+		console.log(referringHost(req));
 		console.log(doc);
 		if (err) {
 			console.log("error connecting to database with request from "+req.headers.referer)
