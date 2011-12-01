@@ -11,7 +11,6 @@ var Schema = mongoose.Schema
 
 var LogEntrySchema = new Schema({
     _id        : ObjectId
-<<<<<<< HEAD
   , user	  : String
   , clicks    : {type: Number, default: 0}
   , views 	  : {type: Number, default: 1}
@@ -52,7 +51,7 @@ LogEntrySchema.statics.registerClick = function(req,cb){
 	});
 }
 LogEntrySchema.statics.findUserWebsiteDoc = function(req,orig_cb,cb){
-	this.findOne({user: req.query.u || req.body.u, website: referringHost(req)},function(err,doc){
+	this.findOne(profile_from(req),function(err,doc){
 		if (err) {
 			console.log("error connecting to database with request from "+req.headers.referer)
 			//fail out
@@ -79,11 +78,13 @@ function referringHost(req){
 }
 function buildProfileDoc(req,cb){
 	if (referringHost(req) != 'mailchimp-simplesignup.com' || referringHost(req) != 'mailchimp-simplesignup.herokuapp.com') {
-		mongoose.model('LogEntry').create({
-			list: req.query.id || req.body.id
-			user: req.query.u || req.body.u,
-			website: referringHost(req),
-		},cb);
+		mongoose.model('LogEntry').create({profile_from(req)},cb);
 	}
+}
+function profile_from(req){
+	return {user: req.query.u || req.body.u, 
+		website: referringHost(req),
+		list: req.query.id || req.body.id
+		}
 }
 mongoose.model("LogEntry", LogEntrySchema);
