@@ -9,6 +9,11 @@ var url = require('url');
 var Schema = mongoose.Schema
   , ObjectId = Schema.ObjectId;
 
+var Snapshots = new Schema({
+	 date		: Date
+	, clicks    : {type: Number, default: 0}
+	, views 	  : {type: Number, default: 1}
+});
 var LogEntrySchema = new Schema({
     _id        : ObjectId
   , user	  : String
@@ -16,6 +21,7 @@ var LogEntrySchema = new Schema({
   , views 	  : {type: Number, default: 1}
   , website   : String
   , list      : String
+  , snapshots : [Snapshots]
 });
 /**
  * Static helper methods
@@ -29,11 +35,18 @@ LogEntrySchema.statics.create = function(options,cb) {
 	}
 	var logEntry = new LogEntry(log);
 	logEntry.save(cb);
+	logEntry.snapshots.push({clicks: 0, views: 1, date: Date()});
 };
 LogEntrySchema.statics.registerView = function(req,cb){
 	this.findUserWebsiteDoc(req,cb,function(doc){
 		if(doc){
-			doc.incrementViews(cb);
+			//take snapshot if it has been a day since the last view
+			var d = new Date(doc.snapshots.slice(-1)[0].date);
+			if (((new Date().getTime()) - 86400000) > d.getTime()){
+				doc.takeSnapshot(function(){
+					doc.incrementViews(cb);
+				});
+			}else { doc.incrementViews(cb); }
 		}else{
 			buildProfileDoc(req,cb);
 		}
@@ -70,6 +83,15 @@ LogEntrySchema.methods.incrementViews = function(cb) {
    	this.views++;
 	this.save(cb);
 };
+LogEntrySchema.methods.takeSnapshot = function(cb){
+	this.snapshots.push({
+		clicks: this.clicks,
+		views: this.views,
+		date: Date()
+	});
+	this.save();
+	cb ? cb() : '';
+}
 /**
  * Private Helpers
  */
@@ -77,7 +99,7 @@ function referringHost(req){
 	return url.parse(req.headers.referer).hostname;
 }
 function buildProfileDoc(req,cb){
-	if (referringHost(req) != 'mailchimp-simplesignup.com' || referringHost(req) != 'mailchimp-simplesignup.herokuapp.com') {
+	if (referringHost(req) != 'mailchimp-simplesignup.com') {
 		mongoose.model('LogEntry').create(profile_from(req),cb);
 	}
 }

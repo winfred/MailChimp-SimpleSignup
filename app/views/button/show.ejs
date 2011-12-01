@@ -216,7 +216,7 @@ body {background:none transparent;}
 					<% if(options.response_position == 'block'){ %>
 						$('.scrollingtext').html("<%=options.signup_prompt%>")
 						$('.response').html(html);
-						$('.response').slideToggle();
+						$('.response').slideDown();
 					<% } else {%>
 						$(".scrollingtext").html(html);
 						toggleMarquee();	
