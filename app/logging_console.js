@@ -8,4 +8,10 @@ module.exports.findAll = function(cb){
 		console.log(docs);
 		cb ? cb(docs) : '';
 	})
-}
+};
+module.exports.removeAll = function(cb){
+	Log.remove({},function(err,docs){
+		console.log(docs);
+		cb ? cb(docs) : '';
+	})
+};

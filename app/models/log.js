@@ -38,33 +38,36 @@ LogEntrySchema.statics.create = function(options,cb) {
 	logEntry.snapshots.push({clicks: 0, views: 1, date: Date()});
 };
 LogEntrySchema.statics.registerView = function(req,cb){
-	this.findUserWebsiteDoc(req,cb,function(doc){
+	this.findUserListDoc(req,cb,function(doc){
 		if(doc){
+			/* Silencing snapshots for now - leaving code in place for reporting/analytics feature down the line
 			//take snapshot if it has been a day since the last view
 			var d = new Date(doc.snapshots.slice(-1)[0].date);
 			if (((new Date().getTime()) - 86400000) > d.getTime()){
 				doc.takeSnapshot(function(){
 					doc.incrementViews(cb);
 				});
-			}else { doc.incrementViews(cb); }
+			}else { }*/
+			 doc.incrementViews(referringHost(req),cb);
 		}else{
 			buildProfileDoc(req,cb);
 		}
 	});
 }
+//Currently, this will only ever register a click on the mailchimp-simplesignup.com profile.
 LogEntrySchema.statics.registerClick = function(req,cb){
-	this.findUserWebsiteDoc(req,cb,function(doc){
+	this.findUserListDoc(req,cb,function(doc){
 		if (doc){
 			doc.incrementClicks(cb);
 		}else{
 			console.log("building log profile upon first subscribe... if in a production environment, this profile should have been built upon the button being loaded rather than here. Check the log model for more details.")
 			//this should only ever run in a dev enironment as it compensates for the localhost/127.0.0.1 conundrum
-			buildProfileDoc(req,cb); 
+			buildProfileDoc(cb); 
 		}	
 	});
 }
-LogEntrySchema.statics.findUserWebsiteDoc = function(req,orig_cb,cb){
-	this.findOne(profile_from(req),function(err,doc){
+LogEntrySchema.statics.findUserListDoc = function(req,orig_cb,cb){
+	this.findOne({user: req.query.u || req.body.u, list: req.query.id || req.body.id},function(err,doc){
 		if (err) {
 			console.log("error connecting to database with request from "+req.headers.referer)
 			//fail out
@@ -79,8 +82,13 @@ LogEntrySchema.methods.incrementClicks = function (cb) {
    	this.clicks++;
 	this.save(cb);
 };
-LogEntrySchema.methods.incrementViews = function(cb) {
+LogEntrySchema.methods.incrementViews = function(referer,cb) {
    	this.views++;
+	//temporary call to vaguely scoped website for internal tracking only 
+	// website will be moved out of here as part of the unique profile identifier once i can pass a referer parameter through the iframe src and generate legit reports for users
+	//as such, the website will be overwritten with the most reset request each time 
+	//once again, I just want to have this data while building out more features
+	this.website = referer;
 	this.save(cb);
 };
 LogEntrySchema.methods.takeSnapshot = function(cb){
@@ -99,6 +107,8 @@ function referringHost(req){
 	return url.parse(req.headers.referer).hostname;
 }
 function buildProfileDoc(req,cb){
+	//let's not generate log entries for all of the button previews in production
+	//staging and dev environments will be flooded by previews, although not really that hard to deal with
 	if (referringHost(req) != 'mailchimp-simplesignup.com') {
 		mongoose.model('LogEntry').create(profile_from(req),cb);
 	}
