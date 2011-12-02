@@ -42,6 +42,8 @@ server.configure('production', function(){
   server.basepath = "http://mailchimp-simplesignup.com";
   server.facebook_basepath = server.basepath;
   server.facebook_appid = "165282016887983";
+  //leaving this in there until those original users update their code - unknown deprecation time
+  server.v01_facebook_appid = "205766679502834";
 });
  
 //after configuring server per environment, init objects accordingly

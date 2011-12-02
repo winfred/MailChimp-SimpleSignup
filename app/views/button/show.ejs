@@ -142,7 +142,8 @@ body {background:none transparent;}
             <script type="text/javascript">
                window.fbAsyncInit = function() {
                    FB.init({
-                       appId: <%= server.facebook_appid %> ,
+                       appId: 
+<%= options.host == "mailchimp-simplesignup.herokuapp.com" ? server.v01_facebook_appid : server.facebook_appid %> ,
                        status: false,
                        // check login status
                        cookie: true,
