@@ -3,6 +3,7 @@ node_modules
 
 config/oauth.js
 config/database.js
+config/sessionSecret.js
 
 test/models/factory/user.factory.js
 test/models/factory/list.factory.js

@@ -8,12 +8,21 @@ mongoose.connect(process.env.MONGOHQ_URL || 'mongodb://localhost/logs');
 require('./models/log');
 
 // Configuration
+var SessionMongoose = require("session-mongoose");
+var mongooseSessionStore = new SessionMongoose({
+    url: process.env.MONGOHQ_URL || "mongodb://localhost/session",
+    interval: 120000 // expiration check worker run interval in millisec (default: 60000)
+});
+
 server.configure(function(){
   server.set('views', __dirname + '/views');
   server.set('view engine', 'ejs');
   server.use(express.bodyParser());
   server.use(express.cookieParser());
-  server.use(express.session({ secret: "janglepop&p7q5linasfasd8uB0xfun" }));
+  server.use(express.session({
+	store: mongooseSessionStore,
+	//so no one hijacks sessions - go create this file and export a complex string
+	 secret: require('../config/sessionSecret')}));
   server.use(express.methodOverride());
   server.use(server.router);
   server.use(express.static(__dirname + '/public'));

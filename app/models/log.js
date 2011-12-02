@@ -104,7 +104,7 @@ LogEntrySchema.methods.takeSnapshot = function(cb){
  * Private Helpers
  */
 function referringHost(req){
-	return url.parse(req.headers.referer).hostname;
+	return url.parse(req.headers.referer || 'BORKED-referer.com').hostname;
 }
 function buildProfileDoc(req,cb){
 	//let's not generate log entries for all of the button previews in production
