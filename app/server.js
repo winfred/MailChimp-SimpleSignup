@@ -22,7 +22,7 @@ server.configure(function(){
   server.use(express.session({
 	store: mongooseSessionStore,
 	//so no one hijacks sessions - go create this file and export a complex string
-	 secret: require('../config/sessionSecret')}));
+	 secret: require('../config/sessionSecret') || 'somethingSuperSecret7a788asd86zx68876zxc867AS8d6asd876'}));
   server.use(express.methodOverride());
   server.use(server.router);
   server.use(express.static(__dirname + '/public'));
