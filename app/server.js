@@ -13,7 +13,7 @@ var mongooseSessionStore = new SessionMongoose({
     url: process.env.MONGOHQ_URL || "mongodb://localhost/session",
     interval: 60000 // expiration check worker run interval in millisec (default: 60000)
 });
-connect.session.ignore.push('/button'); //lets not create a session for every button view
+express.session.ignore.push('/button'); //lets not create a session for every button view
 
 server.configure(function(){
   server.set('views', __dirname + '/views');
