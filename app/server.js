@@ -11,8 +11,9 @@ require('./models/log');
 var SessionMongoose = require("session-mongoose");
 var mongooseSessionStore = new SessionMongoose({
     url: process.env.MONGOHQ_URL || "mongodb://localhost/session",
-    interval: 120000 // expiration check worker run interval in millisec (default: 60000)
+    interval: 60000 // expiration check worker run interval in millisec (default: 60000)
 });
+connect.session.ignore.push('/button'); //lets not create a session for every button view
 
 server.configure(function(){
   server.set('views', __dirname + '/views');
