@@ -111,6 +111,8 @@ function buildProfileDoc(req,cb){
 	//staging and dev environments will be flooded by previews, although not really that hard to deal with
 	if (referringHost(req) != 'mailchimp-simplesignup.com') {
 		mongoose.model('LogEntry').create(profile_from(req),cb);
+	}else{
+		cb();
 	}
 }
 function profile_from(req){
